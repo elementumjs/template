@@ -1,0 +1,41 @@
+{
+  "name": "@elementumjs/template",
+  "version": "0.0.1",
+  "description": "Simple HTML template engine for vanilla WebComponents",
+  "main": "dist/template.cjs.js",
+  "module": "dist/template.esm.js",
+  "browser": "dist/template.umd.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "jest test/*",
+    "build": "NODE_ENV=production rollup -c build/rollup.config.js",
+    "dev": "rollup -w -c build/rollup.config.js",
+    "start": "npm run dev",
+    "docs": "documentation build lib/listenable-data.js -f md -o REFERENCE.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elementumjs/template.git"
+  },
+  "author": "Lucas Menendez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/elementumjs/template/issues"
+  },
+  "homepage": "https://github.com/elementumjs/template#readme",
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/runtime": "^7.9.2",
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "babel-jest": "^25.1.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^25.1.0",
+    "rollup": "^2.1.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-uglify": "^6.0.4"
+  }
+}
