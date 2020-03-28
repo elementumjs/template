@@ -13,7 +13,7 @@
     "build": "NODE_ENV=production rollup -c build/rollup.config.js",
     "dev": "rollup -w -c build/rollup.config.js",
     "start": "npm run dev",
-    "docs": "documentation build lib/listenable-data.js -f md -o REFERENCE.md"
+    "docs": "documentation build lib/*.js -f md -o REFERENCE.md"
   },
   "repository": {
     "type": "git",
