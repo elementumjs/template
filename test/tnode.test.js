@@ -120,13 +120,83 @@ test("TNode._renderInter", () => {
 });
 
 test("TNode._clearInter", () => {
-    
+    try { 
+        new TNode(document.createElement("div"))._clearInter(null, null) 
+    } catch (e) {
+        expect(e).toBeInstanceOf(TypeError);
+    }
+
+    let container = document.createElement("div");
+    container.appendChild(document.createComment("slot(0)"));
+    container.appendChild(document.createElement("span"));
+    container.appendChild(document.createTextNode("end"));
+    container.appendChild(document.createElement("p"));
+
+    let target = new TNode(container.childNodes[0]);
+    target._clearInter(container.childNodes[0], container.childNodes[2]);
+
+    expect(container.innerHTML).toBe("<!--slot(0)-->end<p></p>");
+
+    container = document.createElement("div");
+    container.appendChild(document.createComment("slot(0)"));
+    container.appendChild(document.createElement("span"));
+    container.appendChild(document.createElement("p"));
+    container.appendChild(document.createTextNode("end"));
+
+    target = new TNode(container.childNodes[0]);
+    target._clearInter(container.childNodes[0], null);
+
+    expect(container.innerHTML).toBe("<!--slot(0)-->");
+
+    container = document.createElement("div");
+    container.appendChild(document.createTextNode("end"));
+    container.appendChild(document.createComment("slot(0)"));
+    container.appendChild(document.createElement("span"));
+    container.appendChild(document.createElement("p"));
+
+    target = new TNode(container.childNodes[1]);
+    target._clearInter(container.childNodes[1], null);
+
+    expect(container.innerHTML).toBe("end<!--slot(0)-->");
 });
 
 test("TNode.setFieldValue", () => {
+    let container = document.createElement("div");
+    container.appendChild(document.createComment("slot(0)"));
+    
+    let target = new TNode(container.childNodes[0]);
+    
+    target.setFieldValue(0, "Hello world");
+    expect(target.fields.get(0).value).toBe("Hello world");
 
+    target.setFieldValue(0, 10);
+    expect(target.fields.get(0).value).toBe(10);
+
+    target.setFieldValue(0, false);
+    expect(target.fields.get(0).value).toBe(false);
 });
 
-test("TNode.render", () => {
+test("TNode.render", () => {   
+    let container = document.createElement("div");
+    
+    let attrElem = document.createElement("div");
+    attrElem.setAttribute("test", "<!--slot(0)-->");
+    container.appendChild(attrElem);
 
+    container.appendChild(document.createTextNode("foo"));
+
+    let iterElem = document.createComment("slot(0)");
+    container.appendChild(iterElem);
+
+    container.appendChild(document.createElement("span"));
+
+    let attrTarget = new TNode(attrElem);
+    attrTarget.setFieldValue(0, "test1");
+    attrTarget.render(container);
+
+    let iterTarget = new TNode(iterElem);
+    iterTarget.setFieldValue(0, "test2");
+    iterTarget.render(container);
+
+    expect(container.innerHTML).toBe("<div test=\"test1\"></div>foo<!--slot(0)-->test2<span></span>");
 });
