@@ -25,41 +25,40 @@ test("TValue.constructor", () => {
 });
 
 test("TValue.path", () => {
-    let refPath = "test.path";
-    let refTest = [refPath, null];
-    let ref_path = ["test", "path"];
-
-    let refResult = new TValue(...refTest);
-    expect(refResult._path).toStrictEqual(ref_path);
-    expect(refResult.path).toStrictEqual(refPath);
+    let target = Object.create(TValue.prototype);
+    target._path = ["test", "path"];
+    expect(target.path).toStrictEqual("test.path");
 });
 
 test("TValue.equalPath", () => {
-    try { new TValue(null, 12).equalPath(""); } catch(e) { expect(e).toBeInstanceOf(Error); }
+    let target = Object.create(TValue.prototype);
+    target._type === "raw";
+    try { target.equalPath(""); } catch(e) { expect(e).toBeInstanceOf(TypeError); }
 
-    let pathStr = "test.path";
-    let pathArr = [ "test", "path" ];
-    let wrongPath = "test.wrong";
-    let badPath = null;
-    let target = new TValue(pathStr, null);
-
-    expect(target.equalPath(pathStr)).toBe(true);
-    expect(target.equalPath(pathArr)).toBe(true);
-    expect(target.equalPath(wrongPath)).toBe(false);
-    try { target.equalPath(badPath); } catch (e) { expect(e).toBeInstanceOf(Error); }
+    target._type = "ref";
+    target._path = [ "test", "path" ];
+    expect(target.equalPath("test.path")).toBe(true);
+    expect(target.equalPath([ "test", "path" ])).toBe(true);
+    expect(target.equalPath("test.wrong")).toBe(false);
+    try { target.equalPath(null); } catch (e) { expect(e).toBeInstanceOf(TypeError); }
 });
 
 test("TValue.fromData", () => {
-    try { new TValue(null, true).fromData({}); } catch (e) { expect(e).toBeInstanceOf(Error); }
+    let target = Object.create(TValue.prototype);
+    target._type = "raw";
+    try { target.fromData({ a: "" }); } catch (e) { expect(e).toBeInstanceOf(TypeError); }
+    target._type = "ref";
+    try { target.fromData(null); } catch (e) { expect(e).toBeInstanceOf(TypeError); }
+    try { target.fromData({}); } catch (e) { expect(e).toBeInstanceOf(Error); }
 
     let sourceData = {
         test: {
             path: true
         }
     }
-    let goodPath = "test.path";
-    expect(new TValue(goodPath, null).fromData(sourceData)).toBe(sourceData.test.path);
+    target._path = ["test", "path"];
+    expect(target.fromData(sourceData)).toBe(sourceData.test.path);
 
-    let wrogPath = "test.wrong";
-    expect(new TValue(wrogPath, null).fromData(sourceData)).toBeUndefined();
+    target._path = ["test", "wrong"];
+    expect(target.fromData(sourceData)).toBeUndefined();
 });
