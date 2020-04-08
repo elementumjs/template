@@ -10,8 +10,6 @@
 
 Simple HTML template engine for vanilla WebComponents.
 
-⚠️ Under development library. Do not use it in production projects. ⚠️
-
 - [`template`][6]
   - [Add Github Packages to your registry][7]
   - [Installation][8]

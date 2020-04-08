@@ -10,45 +10,68 @@ test("TNode.constructor", () => {
     expect(new TNode(document.createComment(""))).toBeInstanceOf(TNode);
 });
 
+test("TNode._getOuter", () => {
+    let target = Object.create(TNode.prototype);
+    target._node = document.createElement("div");
+    target._node.setAttribute("test", "<!--slot(0)-->");
+    target._getOuter();
+    expect(target._outer).toBe("<div test=\"<!--slot(0)-->\"></div>");
+
+    target._node.appendChild(document.createComment("slot(1)"));
+    target._getOuter()
+    expect(target._outer).toBe("<div test=\"<!--slot(0)-->\"></div>");
+
+    target._node.appendChild(document.createElement("span"));
+    target._getOuter();
+    expect(target._outer).toBe("<div test=\"<!--slot(0)-->\"></div>");
+});
+
 test("TNode._getType", () => {
     let target = Object.create(TNode.prototype);
     target._node = document.createElement("div");
     target._node.setAttribute("test", "<!--slot(0)-->");
-    target._outer = target._node.outerHTML;
-    expect(target._getType()).toBe("attr");
+    target._getOuter();
+    target._getType();
+    expect(target._type).toBe("attr");
 
     target._node = document.createComment("slot(1)");
-    expect(target._getType()).toBe("interpolation");
+    target._getOuter();
+    target._getType();
+    expect(target._type).toBe("interpolation");
 
-    target._node = document.createTextNode("empty");
-    target._outer = target._node.outerHTML;
-    expect(target._getType()).toBe("empty");
+    target._node = document.createTextNode("");
+    target._getOuter();
+    target._getType();
+    expect(target._type).toBe("empty");
 
     target._node = document.createElement("div");
-    target._outer = target._node.outerHTML;
-    expect(target._getType()).toBe("empty");
+    target._getOuter();
+    target._getType();
+    expect(target._type).toBe("empty");
 
     target._node = document.createComment("");
-    expect(target._getType()).toBe("empty");
+    target._getOuter();
+    target._getType();
+    expect(target._type).toBe("empty");
 });
 
 test("TNode._parseAttr", () => {
     let target = Object.create(TNode.prototype);
     target.fields = new Map();
     target._node = document.createElement("div");
-    target._type = target._getType();
+    target._getType();
     try { target._parseAttr() } catch (e) { expect(e).toBeInstanceOf(TypeError) }
 
     target._node.setAttribute("test0", "<!--slot(0)-->");
-    target._outer = target._node.outerHTML;
-    target._type = target._getType();
+    target._getOuter();
+    target._getType();
     target._parseAttr();
 
     expect(target.fields.size).toBe(1);
     expect(target.fields.get(0)).toEqual(expect.objectContaining({ "attr": "test0" }));
 
     target._node.setAttribute("test1", "<!--slot(1)-->");
-    target._outer = target._node.outerHTML;
+    target._getOuter();
     target._parseAttr();
 
     expect(target.fields.size).toBe(2);
@@ -59,12 +82,12 @@ test("TNode._parseAttr", () => {
 test("TNode._parseInter", () => {
     let target = Object.create(TNode.prototype);
     target._node = document.createComment("");
-    target._type = target._getType();
+    target._getType();
     target.fields = new Map();
     try { target._parseInter() } catch(e) { expect(e).toBeInstanceOf(TypeError) }
     
     target._node = document.createComment("slot(0)");
-    target._type = target._getType();
+    target._getType();
     target._parseInter();
     
     expect(target.fields.size).toBe(1);
@@ -74,14 +97,14 @@ test("TNode._parseInter", () => {
 test("TNode._renderAttr", () => {
     let target = Object.create(TNode.prototype);
     target._node = document.createElement("div");
-    target._type = target._getType();
+    target._getType();
     target.fields = new Map();
     try { target._renderAttr(elem); } catch (e) { expect(e).toBeInstanceOf(TypeError); }
 
     target._node.setAttribute("test1", "<!--slot(0)-->");
     target._node.setAttribute("test2", "<!--slot(1)-->");
-    target._outer = target._node.outerHTML;
-    target._type = target._getType();
+    target._getOuter();
+    target._getType();
     target._parseAttr();
     
     let field0 = target.fields.get(0);
@@ -104,7 +127,7 @@ test("TNode._renderAttr", () => {
 test("TNode._renderInter", () => {
     let target = Object.create(TNode.prototype);
     target._node = document.createElement("div");
-    target._type = target._getType();
+    target._getType();
     target.fields = new Map();
     try { target._renderInter(container); } catch (e) { expect(e).toBeInstanceOf(TypeError); }
     
@@ -112,7 +135,7 @@ test("TNode._renderInter", () => {
     target._node = document.createComment("slot(0)");
     container.appendChild(target._node);
 
-    target._type = target._getType();
+    target._getType();
     target._parseInter();
 
     let temp = target.fields.get(0);
@@ -129,7 +152,7 @@ test("TNode._renderInter", () => {
     container.appendChild(document.createTextNode("!"));
     
     target._node = container.childNodes[1];
-    target._type = target._getType();
+    target._getType();
     target._parseInter();
 
     temp = target.fields.get(0);
@@ -176,7 +199,7 @@ test("TNode._clearInter", () => {
 test("TNode.setFieldValue", () => {
     let target = Object.create(TNode.prototype);
     target._node = document.createComment("slot(0)");
-    target._type = target._getType();
+    target._getType();
     target.fields = new Map();
     target._parseInter();
 
@@ -200,12 +223,12 @@ test("TNode.render", () => {
     attrTarget._node = document.createElement("div");
     attrTarget._node.setAttribute("test", "<!--slot(0)-->");
     attrTarget._outer = attrTarget._node.outerHTML;
-    attrTarget._type = attrTarget._getType();
+    attrTarget._getType();
     attrTarget.fields = new Map();
     
     let interTarget = Object.create(TNode.prototype);
     interTarget._node = document.createComment("slot(0)");
-    interTarget._type = interTarget._getType();
+    interTarget._getType();
     interTarget.fields = new Map();
     
     container.appendChild(attrTarget._node);
