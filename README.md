@@ -87,20 +87,15 @@ To reference any value, you can apply the `val` tag to a data path reference. Fo
     import { html, val } from '@elementumjs/template';
 
     let data = {
-        myProducts: {
-            counter: 0
-        }
+        counter: 0
     }
 
-    let template = html`
-        <span>
-            I got ${ val`myProducts.counter` } product(s)
-        </span>`;
+    let template = html`<h1>Counted ${ val`counter` } times</h1>`;
 ```
 
 #### Render and update
 
-#### Render the template into a `container`
+##### Render the template into a `container`
 
 To render de initialized `Template` you need to use its `render` function. This function receives two arguments:
 
@@ -117,7 +112,7 @@ To render de initialized `Template` you need to use its `render` function. This 
     template.render(container, data);
 ```
 
-#### Update when data changes
+##### Update when data changes
 
 To update a rendered `Template` you need to use its `update` function. This function receives three arguments:
 
@@ -134,8 +129,8 @@ To update a rendered `Template` you need to use its `update` function. This func
     // let container = ...
     // template.render(container, data);
 
-    data.myProducts.counter += 2;
-    template.update(container, "myProducts.counter", data.myProducts.counter);
+    data.counter++;
+    template.update(container, "counter", data.counter);
 ```
 
 #### Full example
@@ -147,18 +142,12 @@ To update a rendered `Template` you need to use its `update` function. This func
 
     // Init data to fill the template
     let data = {
-        counter: 0,
-        text: "Watch which elements are updated on dev-tools"
+        counter: 0
     }
 
     // Instance the container element and creates the template
     let container = document.getElementById('container');
-    let template = html`
-        <div>
-            <h1>Counter ${ val`counter` }</h1>
-            <p>${ data.text }</p>
-        </div>
-    `;
+    let template = html`<h1>Counted ${ val`counter` } times</h1>`;
 
     // Render and update on data change
     template.render(container, data);

@@ -10,8 +10,8 @@ export default [
 	{
 		input: 'lib/template.js',
 		output: [
-			{ file: pkg.browser, format: 'umd', name: 'Template' },
-			{ file: pkg.main, format: 'cjs' },
+			{ file: pkg.browser, format: 'umd', name: 'Template', exports: 'named' },
+			{ file: pkg.main, format: 'cjs', exports: 'named' },
 		],
 		plugins: [
 			resolve(),
@@ -28,9 +28,7 @@ export default [
 	},
 	{
 		input: 'lib/template.js',
-		output: [
-			{ file: pkg.module, format: 'es' }
-		],
+		output: { file: pkg.module, format: 'es', export: 'named' },
 		plugins: [
 			resolve(),
 			babel({
