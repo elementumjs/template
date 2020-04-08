@@ -24,6 +24,7 @@ Simple HTML template engine for vanilla WebComponents.
 
 ---
 
+
 ### Add Github Packages to your registry
 
 Create or edit the `.npmrc` file in the same directory as your `package.json` and include the following line:
