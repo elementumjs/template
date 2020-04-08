@@ -102,7 +102,7 @@ those that have the same reference that the provided. Then, all the
 -   `container` **[Node][38]** The parent [Node][46] where it will be 
     updated into.
 -   `path` **([string][39] \| [Array][44]&lt;[string][39]>)** The path of the [TNode][17] to update.
--   `value` **any** The new value.
+-   `value` **any** The new value. (optional, default `undefined`)
 
 ### render
 
