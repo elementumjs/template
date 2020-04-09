@@ -5,6 +5,13 @@
   "main": "dist/template.cjs.js",
   "module": "dist/template.esm.js",
   "browser": "dist/template.umd.js",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "files": [
+    "lib",
+    "dist"
+  ],
   "directories": {
     "lib": "lib"
   },
