@@ -1,6 +1,6 @@
 {
   "name": "@elementumjs/template",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Simple HTML template engine for vanilla WebComponents",
   "main": "dist/template.cjs.js",
   "module": "dist/template.esm.js",
@@ -13,7 +13,7 @@
     "dist/*.js"
   ],
   "directories": {
-    "lib": "lib"
+    "lib": "dist"
   },
   "scripts": {
     "test": "jest test/*",
