@@ -1,11 +1,10 @@
 {
   "name": "@elementumjs/template",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Simple HTML template engine for vanilla WebComponents",
   "files": [
-    "dist/template.cjs.js",
-    "dist/template.esm.js",
-    "dist/template.umd.js"
+    "lib/*.js",
+    "dist/*.js"
   ],
   "main": "dist/template.cjs.js",
   "module": "dist/template.esm.js",
