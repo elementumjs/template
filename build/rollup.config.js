@@ -28,7 +28,7 @@ export default [
 	},
 	{
 		input: 'lib/template.js',
-		output: { file: pkg.module, format: 'es', export: 'named' },
+		output: { file: pkg.module, format: 'es', exports: 'named' },
 		plugins: [
 			resolve(),
 			babel({
