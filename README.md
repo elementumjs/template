@@ -2,9 +2,10 @@
 
 # `template`
 
+[![CDN](https://img.shields.io/badge/CDN-jsDelivr-blueviolet)][18]
+[![package_version](https://img.shields.io/github/package-json/v/elementumjs/template)][3]
 [![production](https://github.com/elementumjs/template/workflows/production/badge.svg)][1]
 [![develop](https://github.com/elementumjs/template/workflows/develop/badge.svg)][2]
-[![package_version](https://img.shields.io/github/package-json/v/elementumjs/template)][3]
 [![reference](https://img.shields.io/badge/docs-REFERENCE-blue)][4]
 [![license](https://img.shields.io/github/license/elementumjs/template)][5]
 
@@ -14,16 +15,15 @@ Simple HTML template engine for vanilla WebComponents.
   - [Add Github Packages to your registry][7]
   - [Installation][8]
   - [Import][9]
-    - [HTML `<script>` tag][10]
-    - [JavaScript `import`][11]
-    - [Node `require`][12]
+    - [UMD Version][10]
+    - [ES Module][11]
+    - [CommonJS version][12]
   - [Using a template][13]
     - [Template declaration: `html` & `val`][14]
     - [Render and update][15]
     - [Full example][16]
 
 ---
-
 
 ### Add Github Packages to your registry
 
@@ -39,22 +39,29 @@ Install via `npm`:
 
 ### Import
 
-#### HTML `<script>` tag
+#### UMD version
+
+[UMD](https://github.com/umdjs/umd) builds can be used directly in the browser via a `<script>` tag. Dowloading the package with `npm` or using the jsDelivr CDN:
 
 ```html
-    <script src="/node_modules/elementumjs/template/dist/template.umd.js"></script>
+    <!--<script src="/node_modules/elementumjs/template/dist/template.umd.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.umd.js"></script>
     <script>
         // Template.html...
     </script>
 ```
 
-#### JavaScript `import`
+#### ES Module
+
+[ES Module](http://exploringjs.com/es6/ch_modules.html) builds are intended for use with modern bundlers like [webpack 2](https://webpack.js.org) or [rollup](http://rollupjs.org/). Use it with ES6 JavaScript `import`:
   
 ```javascript
     import { html, val } from '@elementumjs/template';
 ```
 
-#### Node `require`
+#### CommonJS version
+
+[CommonJS](http://wiki.commonjs.org/wiki/Modules/1.1) builds are intended for use with older bundlers like [browserify](http://browserify.org/) or [webpack 1](https://webpack.github.io). Use it with `require` funtion or similar:
 
 ```javascript
     var Template = require('elementumjs/template');
@@ -183,11 +190,11 @@ To update a rendered `Template` you need to use its `update` function. This func
 
 [9]: #import
 
-[10]: #html-script-tag 
+[10]: #umd-version 
 
-[11]: #javascript-import 
+[11]: #es-module 
 
-[12]: #node-require 
+[12]: #commonjs-version 
 
 [13]: #using-a-template
 
@@ -198,3 +205,5 @@ To update a rendered `Template` you need to use its `update` function. This func
 [16]: #full-example
 
 [17]: assets/demo.gif
+
+[18]: https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.umd.js
