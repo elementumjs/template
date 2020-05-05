@@ -8,7 +8,7 @@ let isProd = process.env.NODE_ENV === 'production';
 
 export default [
 	{
-		input: 'lib/template.js',
+		input: 'src/template.js',
 		output: [
 			{ file: pkg.browser, format: 'umd', name: 'Template', exports: 'named' },
 			{ file: pkg.main, format: 'cjs', exports: 'named' },
