@@ -25,7 +25,7 @@ Simple HTML template engine for vanilla WebComponents.
 ---
 <br/>
 
-<img src="https://raw.githubusercontent.com/elementumjs/template/develop/assets/hot-to-use-it.svg"/>
+<img src="https://raw.githubusercontent.com/elementumjs/template/develop/assets/how-to-use-it.svg"/>
 
 ### How to use it
 
@@ -54,7 +54,7 @@ To render the template into a container Node, the data to fill the template is p
     render(template(counter), document.body /* the container to render the template */);
 ```
 
-<img src="https://raw.githubusercontent.com/elementumjs/template/develop/assets/full-example.svg)"/>
+<img src="https://raw.githubusercontent.com/elementumjs/template/develop/assets/full-example.svg"/>
 
 ### Full example
 
