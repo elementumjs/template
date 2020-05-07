@@ -21,9 +21,7 @@ Simple HTML template engine for vanilla WebComponents.
     - [Or install the package locally][14]
     - [Other import methods][15]
 
-<br/>
 ---
-<br/>
 
 <img src="https://raw.githubusercontent.com/elementumjs/template/develop/assets/how-to-use-it.svg"/>
 
