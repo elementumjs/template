@@ -12,18 +12,18 @@
 Simple HTML template engine for vanilla WebComponents.
 
 - [`template`][7]
-  - [How to use it][8]
+  - [📝 How to use it][8]
     - [Creating a template: `html` function][9]
     - [Rendering into a container][10]
-  - [Full example][11]
-  - [Installation][12]
+  - [🧪 Full example][11]
+  - [⚙️ Installation][12]
     - [Import from CDN as ES Module][13]
     - [Or install the package locally][14]
     - [Other import methods][15]
 
 ---
 
-### How to use it
+### 📝 How to use it
 
 #### Creating a template: `html` function
 
@@ -50,9 +50,11 @@ To render the template into a container Node, the data to fill the template is p
     render(template(counter), document.body /* the container to render the template */);
 ```
 
-### Full example
+![](https://dummyimage.com/80x100/fff/fff.png)
 
-<img src="./assets/demo.gif" width="500"/>
+### 🧪 Full example
+
+<img src="./assets/demo.gif" width="350"/>
 
 ```javascript
     // import { html, render } from "https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.esm.js";
@@ -74,9 +76,9 @@ To render the template into a container Node, the data to fill the template is p
     }, 1000);
 ```
 
----
+![](https://dummyimage.com/80x100/fff/fff.png)
 
-### Installation
+### ⚙️ Installation
 
 #### Import from CDN as ES Module
 
@@ -132,15 +134,15 @@ Checkout other import methods in [`dist/README.md`](./dist/README.md).
 
 [7]: #template
 
-[8]: #how-to-use-it
+[8]: #📝-how-to-use-it
 
 [9]: #creating-a-template-html-function
 
 [10]: #rendering-into-a-container
 
-[11]: #full-example
+[11]: #🧪-full-example
 
-[12]: #installation
+[12]: #⚙️-installation
 
 [13]: #import-from-cdn-as-es.module
 
