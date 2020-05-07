@@ -35,11 +35,9 @@ class Processor {
      * container.
      */
     render() {
-        /**
-         * Creates a {@link TreeWalker} to iterates over container child nodes.
-         * It uses acceptFilter to get the slot marks ({@link Comment} elements 
-         * that includes an index).
-         */
+        // Creates a {@link TreeWalker} to iterates over container child nodes.
+        // It uses acceptFilter to get the slot marks ({@link Comment} elements 
+        // that includes an index).
         const walker = document.createTreeWalker(
             this.container, 
             NodeFilter.SHOW_COMMENT, 
@@ -47,16 +45,12 @@ class Processor {
             false
         );
 
-        /**
-         * Gets the first mark founded to check if the container has the 
-         * template already rendered.
-         */
+        // Gets the first mark founded to check if the container has the 
+        // template already rendered.
         let current = walker.nextNode();
         if (current === null) {
-            /**
-             * If the first mark founded is null, the template was not detected 
-             * and it is appended to the container.
-             */
+            // If the first mark founded is null, the template was not detected 
+            // and it is appended to the container.
             const range = document.createRange();
             const html = range.createContextualFragment(this.template.html);
             this.container.appendChild(html);
@@ -64,11 +58,9 @@ class Processor {
         }
 
         while (current) {
-            /**
-             * Iterate over the found marks getting their slot index and 
-             * committing the current node (the sibling of the {@link Node} 
-             * mark).
-             */
+            // Iterate over the found marks getting their slot index and 
+            // committing the current node (the sibling of the {@link Node}
+            // mark).
             const { nodeValue } = current;
             const slotIndex = parseInt(nodeValue);
             this.commitNode(current.nextSibling, slotIndex);
@@ -85,31 +77,23 @@ class Processor {
      * @param {number} slotIndex - The index of the slot referenced.
      */
     commitNode(node, slotIndex) {
-        /**
-         * Iterates over the template slots to get the correct one by slotIndex
-         * provided.fo
-         */
+        // Iterates over the template slots to get the correct one by slotIndex
+        // provided.
         const { length } = this.template.slots;
         for (let i = 0; i < length; i++) {
-            /**
-             * Checks if current slot has the same slotIndex that the provided.
-             */
+            // Checks if current slot has the same slotIndex that the provided.
             const slot = this.template.slots[i];
             if (slot.slotIndex === slotIndex) {
-                /**
-                 * If a slot is found, gets the current attr and value slot
-                 * parameters.
-                 */
+                // If a slot is found, gets the current attr and value slot
+                // parameters.
                 const { attr, value } = this.template.slots[i];
 
-                /**
-                 * If the slot attr parameter is not undefined, the slot is an 
-                 * attr. It gets the current attribute value to compare with the
-                 * slot value, if its not equal, the node attribute is updated.
-                 * If the slot is an interpolation, compares its value with the
-                 * slot value, if they are not equal, the target value is 
-                 * updated with the new one.
-                 */
+                // If the slot attr parameter is not undefined, the slot is an 
+                // attr. It gets the current attribute value to compare with the
+                // slot value, if its not equal, the node attribute is updated.
+                // If the slot is an interpolation, compares its value with the
+                // slot value, if they are not equal, the target value is 
+                // updated with the new one.
                 if (attr !== undefined) {
                     const current = node.getAttribute(attr);
                     if (current !== value) node.setAttribute(attr, value);

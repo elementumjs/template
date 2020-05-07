@@ -1,6 +1,6 @@
 {
   "name": "@elementumjs/template",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "Simple HTML template engine for vanilla WebComponents",
   "files": [
     "lib/*.js",
@@ -17,7 +17,7 @@
     "build": "NODE_ENV=production rollup -c build/rollup.config.js",
     "dev": "rollup -w -c build/rollup.config.js",
     "start": "npm run dev",
-    "docs": "documentation build lib/*.js -f md -o REFERENCE.md"
+    "docs": "documentation build src/lib/*.js -f md -o REFERENCE.md"
   },
   "repository": {
     "type": "git",

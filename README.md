@@ -2,26 +2,26 @@
 
 # `template`
 
-[![CDN](https://img.shields.io/badge/CDN-jsDelivr-blueviolet)][18]
-[![package_version](https://img.shields.io/github/package-json/v/elementumjs/template)][3]
-[![production](https://github.com/elementumjs/template/workflows/production/badge.svg)][1]
-[![develop](https://github.com/elementumjs/template/workflows/develop/badge.svg)][2]
-[![reference](https://img.shields.io/badge/docs-REFERENCE-blue)][4]
-[![license](https://img.shields.io/github/license/elementumjs/template)][5]
+[![CDN](https://img.shields.io/badge/CDN-jsDelivr-blueviolet)][1]
+[![package_version](https://img.shields.io/github/package-json/v/elementumjs/template)][2]
+[![production](https://github.com/elementumjs/template/workflows/production/badge.svg)][3]
+[![develop](https://github.com/elementumjs/template/workflows/develop/badge.svg)][4]
+[![reference](https://img.shields.io/badge/docs-REFERENCE-blue)][5]
+[![license](https://img.shields.io/github/license/elementumjs/template)][6]
 
 Simple HTML template engine for vanilla WebComponents.
 
-- [`template`][6]
-  - [Add Github Packages to your registry][7]
-  - [Installation][8]
-  - [Import][9]
-    - [UMD Version][10]
-    - [ES Module][11]
-    - [CommonJS version][12]
-  - [Using a template][13]
-    - [Template declaration: `html` & `val`][14]
-    - [Render and update][15]
-    - [Full example][16]
+- [`template`][7]
+  - [Add Github Packages to your registry][8]
+  - [Installation][9]
+  - [Import][10]
+    - [UMD Version][11]
+    - [ES Module][12]
+    - [CommonJS version][13]
+  - [Using a template][14]
+    - [Creating a template: `html` function][15]
+    - [Rendering into a container][16]
+    - [Full example][17]
 
 ---
 
@@ -70,140 +70,88 @@ Install via `npm`:
 
 ### Using a template
 
-#### Template declaration: `html` & `val`
-
-##### Initialize the template with the `html` tag
+#### Creating a template: `html` function
 
 To define and init a new `Template`, you need to use the `html` template tag:
 
 ```javascript
-    import { html } from '@elementumjs/template';
+    import { html, render } from '@elementumjs/template';
 
-    let template = html`<div>
-        <h1>Hello World!</h1>
-        <p>This is a plain template</p>
-    </div>`
+    const template = (counter) => html`<h1>Counted ${ counter } times</h1>`;
 ```
 
-##### Refering data with `val` tag
 
-To create a reactive template based on an object the data values you need to use the `val` template tag into the definition of the string template during the `Template` initialization.
 
-To reference any value, you can apply the `val` tag to a data path reference. For example, if you want to reference the `counter` in the following snippet you need to pass the path of that variable into its container object: `myProducts.counter`.
+#### Rendering into a container
 
-```javascript
-    import { html, val } from '@elementumjs/template';
-
-    let data = {
-        counter: 0
-    }
-
-    let template = html`<h1>Counted ${ val`counter` } times</h1>`;
-```
-
-#### Render and update
-
-##### Render the template into a `container`
-
-To render de initialized `Template` you need to use its `render` function. This function receives two arguments:
-
-- `container`: The parent `HTML Node` to render the template.
-- `data`: The source object to get the values and inflate the `Template`.
+To render the template into a container Node, the data to fill the template is passed as attribute to the template generator function. The result of that function will be parsed by `render` function to check if the template is already rendered and update it or is not rendered yet and inject it.
 
 ```javascript
-    // import ...
+    import { html, render } from '@elementumjs/template';
 
-    // let data = {...}
-    // let template = html`...`
+    // const template = ...;
 
-    let container = document.getElementById('container');
-    template.render(container, data);
-```
-
-##### Update when data changes
-
-To update a rendered `Template` you need to use its `update` function. This function receives three arguments:
-
-- `container`: The parent `HTML Node` to update the template.
-- `path`: The path of referenced value to update.
-- `value`: The updated value.
-
-```javascript
-    // import ...
-
-    // let data = {...}
-    // let template = html`...`
-
-    // let container = ...
-    // template.render(container, data);
-
-    data.counter++;
-    template.update(container, "counter", data.counter);
+    let counter = 0;
+    render(template(counter), document.body /* the container to render the template */);
 ```
 
 #### Full example
 
-![template demo][17]
+<img src="./assets/demo.gif" width="500"/>
 
 ```javascript
-    import { html, val } from '../dist/template.esm.js';
+    import { html, render } from '@elementumjs/template';
 
-    // Init data to fill the template
-    let data = {
-        counter: 0
-    }
+    // Create the template
+    const template = (counter) => html`<h1>Counted ${ counter } times</h1>`;
 
-    // Instance the container element and creates the template
-    let container = document.getElementById('container');
-    let template = html`<h1>Counted ${ val`counter` } times</h1>`;
+    // Instance the value and render the template into the container.
+    let counter = 0;
+    render(template(counter), document.body);
 
-    // Render and update on data change
-    template.render(container, data);
-
-    // Update value and template loop
+    // Update the value and render the template
     let loop = setInterval(() => {
-        data.counter++;
-        template.update(container, 'counter', data.counter);
+        counter++;
+        render(template(counter), document.body);
 
-        if (data.counter == 10) clearInterval(loop);
+        if (counter == 10) clearInterval(loop);
     }, 1000);
 ```
 
-
 [0]: assets/header.png
 
-[1]: https://github.com/elementumjs/template/actions?query=workflow%3Aproduction
+[1]: https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.umd.js
 
-[2]: https://github.com/elementumjs/template/actions?query=workflow%3Adevelop
+[2]: https://github.com/elementumjs/template/packages/
 
-[3]: https://github.com/elementumjs/template/packages/
+[3]: https://github.com/elementumjs/template/actions?query=workflow%3Aproduction
 
-[4]: REFERENCE.md
+[4]: https://github.com/elementumjs/template/actions?query=workflow%3Adevelop
 
-[5]: LICENSE
+[5]: REFERENCE.md
 
-[6]: #template
+[6]: LICENSE
 
-[7]: #add-github-packages-to-your-registry
+[7]: #template
 
-[8]: #installation
+[8]: #add-github-packages-to-your-registry
 
-[9]: #import
+[9]: #installation
 
-[10]: #umd-version 
+[10]: #import
 
-[11]: #es-module 
+[11]: #umd-version
 
-[12]: #commonjs-version 
+[12]: #es-module
 
-[13]: #using-a-template
+[13]: #commonjs-version
 
-[14]: #template-declaration-html-&-val
+[14]: #using-a-template
 
-[15]: #render-and-update
+[15]: #creating-a-template-html-function
 
-[16]: #full-example
+[16]: #rendering-into-a-container
 
-[17]: assets/demo.gif
+[17]: #full-example
 
-[18]: https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.umd.js
+[18]: assets/demo.gif

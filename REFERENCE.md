@@ -2,346 +2,148 @@
 
 ### Table of Contents
 
--   [Path][1]
-    -   [fromNode][2]
-        -   [Parameters][3]
-    -   [findNode][4]
-        -   [Parameters][5]
--   [TSlot][6]
-    -   [Properties][7]
--   [Template][8]
-    -   [tslots][9]
-    -   [update][10]
-        -   [Parameters][11]
-    -   [render][12]
-        -   [Parameters][13]
--   [TNodeField][14]
-    -   [Properties][15]
--   [TNodeType][16]
--   [TNode][17]
-    -   [hasTNodeFields][18]
-    -   [isAttr][19]
-    -   [isInterpolation][20]
-    -   [setFieldValue][21]
-        -   [Parameters][22]
-    -   [render][23]
-        -   [Parameters][24]
--   [TValueType][25]
--   [TValue][26]
-    -   [constructor][27]
-        -   [Parameters][28]
-    -   [value][29]
-    -   [path][30]
-    -   [isRef][31]
-    -   [isRaw][32]
-    -   [equalPath][33]
-        -   [Parameters][34]
-    -   [fromData][35]
-        -   [Parameters][36]
+-   [acceptNode][1]
+    -   [Parameters][2]
+-   [Processor][3]
+    -   [Parameters][4]
+    -   [render][5]
+    -   [commitNode][6]
+        -   [Parameters][7]
+-   [Slot][8]
+    -   [Properties][9]
+-   [markGenerator][10]
+    -   [Parameters][11]
+-   [Template][12]
+    -   [html][13]
+    -   [prepare][14]
+        -   [Parameters][15]
 
-## Path
+## acceptNode
 
-Path class provide a simple API to uniquely identify any DOM node. Inspired
-by [XPath][37] syntax.
+acceptNode its a function to filter Comment nodes with a number as nodeValue.
+This kind of Comments represents the template slot marks.
 
-### fromNode
+### Parameters
 
-Path.fromNode returns the unique identifier path of the provided node. 
-Iterates over all the provided node antecessors and get some of it's 
-attributes to create a unique path.
+-   `node` **[Node][16]** Node candidate to filter.
 
-#### Parameters
+Returns **[boolean][17]** Returns if node provided is allowed.
 
--   `node` **[Node][38]** The node to retreive its path.
+## Processor
 
-Returns **[string][39]** Returns the unique path as a string.
+Processor class interprets a template, renders, and updates its slots into a 
+provided container. It checks if the template has not rendered yet into the 
+container and inject it into the container. If it is already rendered, 
+iterates over its slots and checks if they have changed to update them.
 
-### findNode
+### Parameters
 
-Path.findNode returns the node identified with the path provided. Searches
-into the root node provided iterating over all nodes of the path to get 
-the referenced node.
+-   `template` **[Template][18]** The template to process.
+-   `container` **[HTMLElement][19]** The container to render the template.
+
+### render
+
+render checks if the template is already rendered into the container 
+after injecting it. If it was rendered, it iterates over template slots 
+to render them. If it was not rendered, it appends the template to the 
+container.
+
+### commitNode
+
+commitNode gets the slot referenced by the index and compares its value
+with the target node value. If its not equal, the target node will be 
+updated.
 
 #### Parameters
 
--   `path` **[string][39]** The identifier path of the referenced node.
--   `root` **[Node][38]** The root node where the referenced node will be search.
+-   `node` **[Node][16]** The target node of the slot.
+-   `slotIndex` **[number][20]** The index of the slot referenced.
 
-## TSlot
+## Slot
 
-TSlot object
+Slot object abstracts a fillable slot of a template.
 
-Type: [Object][40]
+Type: [Object][21]
 
 ### Properties
 
--   `index` **[number][41]** desc
--   `tnode` **[TNode][42]** desc
--   `tvalue` **[TValue][43]** desc
+-   `slotIndex` **[number][20]** The attribute index
+-   `attr` **[string][22]?** The attribute name
+-   `value` **any** The value of the field
+
+## markGenerator
+
+markGenerator function returns a HTML comment string definition with the slot
+mark content as value.
+
+### Parameters
+
+-   `needle` **any** Content to place into the mark
 
 ## Template
 
-Template class allows to create a reactive template based on a string and 
-provides a simple API to render and update them.
+Template class abstracts the current template strings, args and slots.
 
-### tslots
+### html
 
-Template.tslots contains a [TSlot][6] array with the raw and 
-referenced ones.
+html function returns the string definition of the template, including
+the slots marks (attributes and interpolation marks) and the value of
+the slots injected.
 
-Type: [Array][44]&lt;[TSlot][45]>
+Returns **[string][22]** The composed html string definition.
 
-### update
+### prepare
 
-Template.update function iterates over all the [TSlot][6]s and updates
-those that have the same reference that the provided. Then, all the 
-[TNode][17]s with an updated [TSlot][6] are rendered again.
-
-#### Parameters
-
--   `container` **[Node][38]** The parent [Node][46] where it will be 
-    updated into.
--   `path` **([string][39] \| [Array][44]&lt;[string][39]>)** The path of the [TNode][17] to update.
--   `value` **any** The new value. (optional, default `undefined`)
-
-### render
-
-Template.render function performs the rendered process into the 
-[Node][46] container provided. It inject the created template and sets
-the initial [TSlot][6]s values.
+prepare functions detect the slots in the current template, its type 
+between interpolation and attribute, and the slot index. Iterates over 
+the template strings composing each slot.
 
 #### Parameters
 
--   `container` **[Node][38]** The parent [Node][46] to render the template.
--   `data` **([Object][40] \| [Array][44])** The data source to fill the template.
+-   `values` **[Array][23]** The current values of the slots
 
-## TNodeField
+[1]: #acceptnode
 
-TNodeField object abstracts a fillable slot of a TNode.
+[2]: #parameters
 
-Type: [Object][40]
+[3]: #processor
 
-### Properties
+[4]: #parameters-1
 
--   `attr` **[string][39]?** The attribute name, if field is for an 
-    attribute.
--   `nextElem` **[Node][38]?** The following [Node][46] of the fillable 
-    interpolation
--   `value` **any** The value of the field.
+[5]: #render
 
-## TNodeType
+[6]: #commitnode
 
-TNodeType constant defines the range of types that a TNode can be.
+[7]: #parameters-2
 
-## TNode
+[8]: #slot
 
-TNode class makes a [Node][46] ready to perform updates reactivly.
+[9]: #properties
 
-### hasTNodeFields
+[10]: #markgenerator
 
-TNode.hasTNodeFields returns if the current TNode has any [TNodeField][14] 
-to fill with TValues.
+[11]: #parameters-3
 
-Type: [boolean][47]
+[12]: #template
 
-### isAttr
+[13]: #html
 
-TNode.isAttr returns if the current TNode is a fillable attribute with
-TValue.
+[14]: #prepare
 
-Type: [boolean][47]
+[15]: #parameters-4
 
-### isInterpolation
+[16]: https://developer.mozilla.org/docs/Web/API/Node/nextSibling
 
-TNode.isAttr returns if the current TNode is a fillable HTML 
-interpolation with TValue.
+[17]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-Type: [boolean][47]
+[18]: #template
 
-### setFieldValue
+[19]: https://developer.mozilla.org/docs/Web/HTML/Element
 
-TNode.setFieldValue allows setting the value of the current [TNode][17].
-It updates the value of the [TNodeField][14] referenced by the index
-provided.
-[TNodeField][14]'s.
+[20]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-#### Parameters
+[21]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
--   `index` **[number][41]** The index of the [TNodeField][14] to be set.
--   `value` **any** The new value of the referenced [TNodeField][14].
+[22]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-### render
-
-TNode.render function starts the process of renderization of the current
-[Node][46], based on the current [TNodeType][16].
-
-#### Parameters
-
--   `container` **[Node][38]** 
-
-## TValueType
-
-TValueType constant defines the range of types that a TValue can be.
-
-## TValue
-
-TValue class abstracts the value reference of data symbol into an HTML 
-template. It provides simple API to create a reference to a data value into a 
-string to retrieve the correct value when the template is rendered. It even 
-allows storing raw values instead of references.
-
-### constructor
-
-Creates a TValue object base on initial parameters provided. It checks if 
-provided value its a raw value or reference value and prepares itself 
-based on that information.
-
-#### Parameters
-
--   `path` **[string][39]?** The path of value into the source data. (optional, default `null`)
--   `value` **any?** The raw value of patherenced data. (optional, default `null`)
-
-### value
-
-TValue.value returns the current raw value of [TValue][26] object 
-intanced.
-
-Type: any
-
-### path
-
-TValue.path returns the current reference of [TValue][26] object instanced 
-parsed as string.
-
-Type: [string][39]
-
-### isRef
-
-TValue.isRef returns if the current [TValue][26] object instance is a 
-reference value.
-
-Type: [boolean][47]
-
-### isRaw
-
-TValue.isRaw returns if the current [TValue][26] object instance is a raw 
-value.
-
-Type: [boolean][47]
-
-### equalPath
-
-TValue.equalPath returns if the current [TValue][26] has an equal 
-path that the path provided as an argument. If the current [TValue][26] 
-is not a reference [TValue][26] rais an Error.
-
-#### Parameters
-
--   `path`  
-
-Returns **[boolean][47]** If current reference is equal to the provided one.
-
-### fromData
-
-TValue.fromData searches the value referenced by the current [TValue][26]
-instance reference into the data object provided as an argument.
-
-#### Parameters
-
--   `data` **[Object][40]** The source data object to search for the reference.
-
-Returns **any** The value referenced.
-
-[1]: #path
-
-[2]: #fromnode
-
-[3]: #parameters
-
-[4]: #findnode
-
-[5]: #parameters-1
-
-[6]: #tslot
-
-[7]: #properties
-
-[8]: #template
-
-[9]: #tslots
-
-[10]: #update
-
-[11]: #parameters-2
-
-[12]: #render
-
-[13]: #parameters-3
-
-[14]: #tnodefield
-
-[15]: #properties-1
-
-[16]: #tnodetype
-
-[17]: #tnode
-
-[18]: #hastnodefields
-
-[19]: #isattr
-
-[20]: #isinterpolation
-
-[21]: #setfieldvalue
-
-[22]: #parameters-4
-
-[23]: #render-1
-
-[24]: #parameters-5
-
-[25]: #tvaluetype
-
-[26]: #tvalue
-
-[27]: #constructor
-
-[28]: #parameters-6
-
-[29]: #value
-
-[30]: #path-1
-
-[31]: #isref
-
-[32]: #israw
-
-[33]: #equalpath
-
-[34]: #parameters-7
-
-[35]: #fromdata
-
-[36]: #parameters-8
-
-[37]: https://es.wikipedia.org/wiki/XPath
-
-[38]: https://developer.mozilla.org/docs/Web/API/Node/nextSibling
-
-[39]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
-
-[40]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
-
-[41]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
-
-[42]: #tnode
-
-[43]: #tvalue
-
-[44]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
-
-[45]: #tslot
-
-[46]: https://developer.mozilla.org/docs/Web/API/Node/nextSibling
-
-[47]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[23]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
