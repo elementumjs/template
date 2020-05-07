@@ -12,81 +12,36 @@
 Simple HTML template engine for vanilla WebComponents.
 
 - [`template`][7]
-  - [Add Github Packages to your registry][8]
-  - [Installation][9]
-  - [Import][10]
-    - [UMD Version][11]
-    - [ES Module][12]
-    - [CommonJS version][13]
-  - [Using a template][14]
-    - [Creating a template: `html` function][15]
-    - [Rendering into a container][16]
-    - [Full example][17]
+  - [How to use it][8]
+    - [Creating a template: `html` function][9]
+    - [Rendering into a container][10]
+  - [Full example][11]
+  - [Installation][12]
+    - [Import from CDN as ES Module][13]
+    - [Or install the package locally][14]
+    - [Other import methods][15]
 
 ---
 
-### Add Github Packages to your registry
-
-Create or edit the `.npmrc` file in the same directory as your `package.json` and include the following line:
-
-        registry=https://npm.pkg.github.com/elementumjs
-
-### Installation
-
-Install via `npm`:
-
-        npm install @elementumjs/template
-
-### Import
-
-#### UMD version
-
-[UMD](https://github.com/umdjs/umd) builds can be used directly in the browser via a `<script>` tag. Dowloading the package with `npm` or using the jsDelivr CDN:
-
-```html
-    <!--<script src="/node_modules/elementumjs/template/dist/template.umd.js"></script>-->
-    <script src="https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.umd.js"></script>
-    <script>
-        // Template.html...
-    </script>
-```
-
-#### ES Module
-
-[ES Module](http://exploringjs.com/es6/ch_modules.html) builds are intended for use with modern bundlers like [webpack 2](https://webpack.js.org) or [rollup](http://rollupjs.org/). Use it with ES6 JavaScript `import`:
-  
-```javascript
-    import { html, val } from '@elementumjs/template';
-```
-
-#### CommonJS version
-
-[CommonJS](http://wiki.commonjs.org/wiki/Modules/1.1) builds are intended for use with older bundlers like [browserify](http://browserify.org/) or [webpack 1](https://webpack.github.io). Use it with `require` funtion or similar:
-
-```javascript
-    var Template = require('elementumjs/template');
-    // Template.html...
-```
-
-### Using a template
+### How to use it
 
 #### Creating a template: `html` function
 
 To define and init a new `Template`, you need to use the `html` template tag:
 
 ```javascript
+    // import { html, render } from "https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.esm.js";
     import { html, render } from '@elementumjs/template';
 
     const template = (counter) => html`<h1>Counted ${ counter } times</h1>`;
 ```
-
-
 
 #### Rendering into a container
 
 To render the template into a container Node, the data to fill the template is passed as attribute to the template generator function. The result of that function will be parsed by `render` function to check if the template is already rendered and update it or is not rendered yet and inject it.
 
 ```javascript
+    // import { html, render } from "https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.esm.js";
     import { html, render } from '@elementumjs/template';
 
     // const template = ...;
@@ -95,11 +50,12 @@ To render the template into a container Node, the data to fill the template is p
     render(template(counter), document.body /* the container to render the template */);
 ```
 
-#### Full example
+### Full example
 
 <img src="./assets/demo.gif" width="500"/>
 
 ```javascript
+    // import { html, render } from "https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.esm.js";
     import { html, render } from '@elementumjs/template';
 
     // Create the template
@@ -118,6 +74,48 @@ To render the template into a container Node, the data to fill the template is p
     }, 1000);
 ```
 
+---
+
+### Installation
+
+#### Import from CDN as ES Module
+
+Import from  [jsDelivr CDN]():
+
+```javascript
+    import { html, render } from "https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.esm.js";
+```
+
+#### Or install the package locally
+
+##### Add Github Packages to your registry
+
+Create or edit the `.npmrc` file in the same directory as your `package.json` and include the following line:
+
+```
+    registry=https://npm.pkg.github.com/elementumjs
+```
+
+##### Download the package
+
+Install via `npm`:
+
+```sh
+    npm install @elementumjs/template
+```
+
+##### Import as ES Module
+
+[ES Module](http://exploringjs.com/es6/ch_modules.html) builds are intended for use with modern bundlers like [webpack 2](https://webpack.js.org) or [rollup](http://rollupjs.org/). Use it with ES6 JavaScript `import`:
+  
+```javascript
+    import { html, val } from '@elementumjs/template';
+```
+
+#### Other import methods
+
+Checkout other import methods in [`dist/README.md`](./dist/README.md).
+
 [0]: assets/header.png
 
 [1]: https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.umd.js
@@ -134,24 +132,18 @@ To render the template into a container Node, the data to fill the template is p
 
 [7]: #template
 
-[8]: #add-github-packages-to-your-registry
+[8]: #how-to-use-it
 
-[9]: #installation
+[9]: #creating-a-template-html-function
 
-[10]: #import
+[10]: #rendering-into-a-container
 
-[11]: #umd-version
+[11]: #full-example
 
-[12]: #es-module
+[12]: #installation
 
-[13]: #commonjs-version
+[13]: #import-from-cdn-as-es.module
 
-[14]: #using-a-template
+[14]: #or-install-the-package-locally
 
-[15]: #creating-a-template-html-function
-
-[16]: #rendering-into-a-container
-
-[17]: #full-example
-
-[18]: assets/demo.gif
+[15]: #other-import-methods
