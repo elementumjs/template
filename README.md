@@ -1,4 +1,4 @@
-![template header][0]
+<img src="https://raw.githubusercontent.com/elementumjs/template/master/assets/header.png"/>
 
 # `template`
 
