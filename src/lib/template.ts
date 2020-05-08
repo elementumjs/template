@@ -1,38 +1,39 @@
-/**
- * Slot object abstracts a fillable slot of a template.
- * @typedef {Object} Slot
- * @property {number} slotIndex - The attribute index
- * @property {string=} attr - The attribute name
- * @property {*} value - The value of the field
- */
+interface Slot {
+    slotIndex: number;
+    attr?: string;
+    value: any;
+}
 
 // openingHint string contains and empty Comment representation.
-const openingHint = "<";
+const openingHint: string = "<";
 
 /**
  * markGenerator function returns a HTML comment string definition with the slot
  * mark content as value.
  * @param {*} needle - Content to place into the mark
  */
-const markGenerator = (needle) => `<!--${needle}-->`;
+const markGenerator = (needle: any): string => `<!--${ needle }-->`;
 
 // Regex expressions to detect attributes slots in string parts.
-const attributeNameAndPrefixRgx = /\s(\S+)\=[\"\']([^\"]*)$/;
-const attributeSufixRgx = /^([^\"]*)[\"|\'][\s|\>]/;
+const attributeNameAndPrefixRgx: RegExp = /\s(\S+)\=[\"\']([^\"]*)$/;
+const attributeSufixRgx: RegExp = /^([^\"]*)[\"|\'][\s|\>]/;
 
 /**
  * Template class abstracts the current template strings, args and slots.
  * @class Template
  */
 class Template {
-     /**
+    strings: Array<string>;
+    slots: Array<Slot>;
+
+    /**
      * Creates the {@link Template}, initializes some internal variables and 
      * starts the building process.
      * @param {string[]} strings - The literal string tag strings
      * @param {Object|Array} values - The literal string tag args
      */
-    constructor(strings, values = []) {
-        this.strings = strings.raw.slice(0);
+    constructor(strings: Array<string>, values: Array<any> = []) {
+        this.strings = strings;
         this.slots = [];
 
         this.prepare(values);
@@ -44,14 +45,14 @@ class Template {
      * the slots injected.
      * @returns {string} The composed html string definition.
      */
-    get html() {
+    get html(): string {
         // Creates a variable to store the html string definition and append the
         // formated part in each iteration.
-        let htmlDef = "";
+        let htmlDef: string = "";
 
         // Iterates over strings items appending its slot value. If the slot is 
         // an interpolation, the end mark is appended after slot value.
-        const last = this.strings.length - 1;
+        const last: number = this.strings.length - 1;
         for (let i = 0; i < last; i++) {
             // Gets attribute and value parameter of the slot and append it to 
             // the after the current string.
@@ -60,7 +61,7 @@ class Template {
 
             // Checks if is an interpolation to append to it the end mark.
             // An end mark is a HTML Comment with a dash as content.
-            if (attr === undefined) htmlDef += markGenerator("-");
+            if (attr === null) htmlDef += markGenerator("-");
         }
         
         // Returns the result of the iterations, appending to it the last 
@@ -74,25 +75,25 @@ class Template {
      * the template strings composing each slot.
      * @param {Array} values - The current values of the slots
      */
-    prepare(values) {
+    prepare(values: Array<any>) {
         // Creates a variable to store the current slot index and iterates over
         // template strings identifying the current slot and parse it.
-        let slotIndex = 0;
-        let length = this.strings.length - 1;
+        let slotIndex: number = 0;
+        let length: number = this.strings.length - 1;
         for (let i = 0; i < length; i++) {
             // Gets the current string and value to create the slot.
-            const part = this.strings[i];
-            const value = values[i];
+            const part: string = this.strings[i];
+            const value: number = values[i];
 
             // Checks if the current string is an attribute using a 
             // {@link Regex}.
-            const result = attributeNameAndPrefixRgx.exec(part);
+            const result: RegExpExecArray = attributeNameAndPrefixRgx.exec(part);
             if (result !== null) {
                 // If it is an attribute, identifies the initial position of the
                 // opening {@link Node} character to mark the element. If it's
                 // the first attribute slot of the {@link Node}, updates the 
                 // current slot index to the new one.
-                const pos = part.lastIndexOf(openingHint);
+                const pos: number = part.lastIndexOf(openingHint);
                 if (pos != -1) slotIndex++;
 
                 // If the opening character is in the first position of the 
@@ -102,28 +103,28 @@ class Template {
                 if (pos === 0) {
                     this.strings[i] = markGenerator(slotIndex) + part; 
                 } else if (pos > 0) {
-                    const start = part.substring(0, pos - 1);
-                    const end = part.substring(pos);
+                    const start: string = part.substring(0, pos - 1);
+                    const end: string = part.substring(pos);
                     
                     this.strings[i] = start + markGenerator(slotIndex) + end;
                 }
                 
                 // Gets the attribute name and store the slot.
-                const attr = result[1];
+                const attr: string = result[1];
 
                 // Get prefix value of slot attribute.
-                const prefix = result[2];
-                const prefixPos = this.strings[i].length - prefix.length;
+                const prefix: string = result[2];
+                const prefixPos: number = this.strings[i].length - prefix.length;
                 this.strings[i] = this.strings[i].slice(0, prefixPos);
                 
                 // Gets the following parts that belong to the same slot 
                 // attribute. Gets the next part and checks if contains the end 
                 // of the attribute definition. While it does not contain the 
                 // end, iterates over the following parts to find it.
-                let following = "";
-                let next = this.strings[i + 1];
-                let endOfAttribute = attributeSufixRgx.exec(next);
-                while (!endOfAttribute) {
+                let following: string = "";
+                let next: string = this.strings[i + 1];
+                let endOfAttribute: RegExpExecArray = attributeSufixRgx.exec(next);
+                while (endOfAttribute === null) {
                     // In every iteration, stores the followings values and 
                     // parts to append it to the slot.
                     following += next + values[i + 1];
@@ -141,7 +142,7 @@ class Template {
 
                 // Once the end of the attribute is found, it gets the suffix 
                 // substring part of the next one and updates it.
-                const suffix = endOfAttribute[1];
+                const suffix: string = endOfAttribute[1];
                 this.strings[i + 1] = next.slice(suffix.length);
 
                 // Stores the slot composing its value withe the current value,
@@ -158,10 +159,10 @@ class Template {
                 // is stored.
                 slotIndex++;
                 this.strings[i] = part + markGenerator(slotIndex);
-                this.slots.push({ slotIndex, value });
+                this.slots.push({ slotIndex, attr: null, value });
             }
         }
     }
 }
 
-export default Template;
+export { Slot, Template };

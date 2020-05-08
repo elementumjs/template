@@ -1,12 +1,16 @@
+import { Template, Slot } from "./template";
+
 /**
  * acceptNode its a function to filter Comment nodes with a number as nodeValue.
  * This kind of Comments represents the template slot marks. 
  * @param {Node} node - Node candidate to filter.
  * @returns {boolean} Returns if node provided is allowed.
  */
-const acceptNode = (node) => {
+const acceptNode = (node: Node): number => {
     const { nodeType, nodeValue } = node;
-    return nodeType === Node.COMMENT_NODE && !!parseInt(nodeValue);
+
+    return (nodeType === Node.COMMENT_NODE && !!parseInt(nodeValue)) ?
+        NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
 }
 
 /**
@@ -16,6 +20,9 @@ const acceptNode = (node) => {
  * iterates over its slots and checks if they have changed to update them.
  */
 class Processor {
+    template: Template;
+    container: HTMLElement;
+
     /**
      * Processor constructor receives the template to process and the container 
      * where it will be rendered.
@@ -23,7 +30,7 @@ class Processor {
      * @param {Template} template - The template to process.
      * @param {HTMLElement} container - The container to render the template.
      */
-    constructor(template, container) {
+    constructor(template: Template, container: HTMLElement) {
         this.template = template;
         this.container = container;
     }
@@ -51,8 +58,8 @@ class Processor {
         if (current === null) {
             // If the first mark founded is null, the template was not detected 
             // and it is appended to the container.
-            const range = document.createRange();
-            const html = range.createContextualFragment(this.template.html);
+            const range: Range = document.createRange();
+            const html: DocumentFragment = range.createContextualFragment(this.template.html);
             this.container.appendChild(html);
             return;
         }
@@ -62,7 +69,7 @@ class Processor {
             // committing the current node (the sibling of the {@link Node}
             // mark).
             const { nodeValue } = current;
-            const slotIndex = parseInt(nodeValue);
+            const slotIndex: number = parseInt(nodeValue);
             this.commitNode(current.nextSibling, slotIndex);
 
             current = walker.nextNode();
@@ -76,13 +83,13 @@ class Processor {
      * @param {Node} node - The target node of the slot.
      * @param {number} slotIndex - The index of the slot referenced.
      */
-    commitNode(node, slotIndex) {
+    commitNode(node: HTMLElement | Node, slotIndex: number) {
         // Iterates over the template slots to get the correct one by slotIndex
         // provided.
         const { length } = this.template.slots;
         for (let i = 0; i < length; i++) {
             // Checks if current slot has the same slotIndex that the provided.
-            const slot = this.template.slots[i];
+            const slot: Slot = this.template.slots[i];
             if (slot.slotIndex === slotIndex) {
                 // If a slot is found, gets the current attr and value slot
                 // parameters.
@@ -94,13 +101,13 @@ class Processor {
                 // If the slot is an interpolation, compares its value with the
                 // slot value, if they are not equal, the target value is 
                 // updated with the new one.
-                if (attr !== undefined) {
-                    const current = node.getAttribute(attr);
-                    if (current !== value) node.setAttribute(attr, value);
+                if (attr !== null) {
+                    const current = (node as HTMLElement).getAttribute(attr);
+                    if (current !== value) (node as HTMLElement).setAttribute(attr, value);
                 } else if (node.nodeValue != value) node.nodeValue = value;
             }
         }
     }
 }
 
-export default Processor;
+export { Processor };
