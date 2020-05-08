@@ -40,7 +40,7 @@ To define and init a new `Template`, you need to use the `html` template tag:
 
 #### Rendering into a container
 
-To render the template into a container Node, the data to fill the template is passed as attribute to the template generator function. The result of that function will be parsed by `render` function to check if the template is already rendered and update it or is not rendered yet and inject it.
+To render the template into a container `HTMLElement`, the data to fill the template is passed as an attribute to the template generator function. The result of that function will be parsed by `render` function to check if the template is already rendered and update it or is not rendered yet and inject it.
 
 ```javascript
     // import { html, render } from "https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.esm.js";
