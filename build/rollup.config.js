@@ -15,7 +15,7 @@ export default [
 			{ file: pkg.module, format: "es", exports: "named" },
 		],
 		plugins: [
-			typescript({ lib: ["es5", "es6", "dom"], target: "es5" }),
+			typescript({ tsconfig: "./build/tsconfig.json" }),
 			resolve({ jsnext: true }),
 			commonjs(),
 			isProd && terser()

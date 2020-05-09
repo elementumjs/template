@@ -1,0 +1,15 @@
+{
+    "include": [
+        "../src/*.ts",
+        "../src/lib/*.ts"
+    ],
+    "compilerOptions": {
+        "rootDir": "../src",
+        "target": "ES5",
+        "lib": [
+            "es5", 
+            "es6", 
+            "dom"
+        ],
+    }
+}

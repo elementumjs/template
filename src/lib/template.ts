@@ -1,10 +1,18 @@
+/**
+ * Slot object abstracts a fillable slot of a template.
+ */
 interface Slot {
+    /** The attribute index */
     slotIndex: number;
+    /** The attribute name */
     attr?: string;
+    /** The value of the field */
     value: any;
 }
 
-// openingHint string contains and empty Comment representation.
+/**
+ * openingHint string contains and empty Comment representation. 
+ */
 const openingHint: string = "<";
 
 /**
@@ -14,8 +22,14 @@ const openingHint: string = "<";
  */
 const markGenerator = (needle: any): string => `<!--${ needle }-->`;
 
-// Regex expressions to detect attributes slots in string parts.
+/**
+ * Regex expressions to detect attributes name and its prefix.
+ */ 
 const attributeNameAndPrefixRgx: RegExp = /\s(\S+)\=[\"\']([^\"]*)$/;
+
+/**
+ * Regex expressions to catchs the slot attribute sufix.
+ */
 const attributeSufixRgx: RegExp = /^([^\"]*)[\"|\'][\s|\>]/;
 
 /**
