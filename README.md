@@ -128,7 +128,7 @@ Checkout other import methods in [`dist/README.md`](./dist/README.md).
 
 [4]: https://github.com/elementumjs/template/actions?query=workflow%3Adevelop
 
-[5]: docs/globas.md
+[5]: docs/globals.md
 
 [6]: LICENSE
 
