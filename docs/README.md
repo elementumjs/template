@@ -1,4 +1,6 @@
 
+# @elementumjs/template
+
 <img src="https://raw.githubusercontent.com/elementumjs/template/master/assets/header.png"/>
 
 [![CDN](https://img.shields.io/badge/CDN-jsDelivr-blueviolet)][1]
@@ -8,21 +10,20 @@
 [![reference](https://img.shields.io/badge/docs-REFERENCE-blue)][5]
 [![license](https://img.shields.io/github/license/elementumjs/template)][6]
 
-Simple HTML template engine for vanilla WebComponents.
+`@elementum/template` is a lightweight and powerful HTML template engine for vanilla WebComponents.
 
-- [`template`][7]
-  - [📝 How to use it][8]
-    - [Creating a template: `html` function][9]
-    - [Rendering into a container][10]
-  - [🧪 Full example][11]
-  - [⚙️ Installation][12]
-    - [Import from CDN as ES Module][13]
-    - [Or install the package locally][14]
-    - [Other import methods][15]
+- [📝 How to use it][7]
+  - [Creating a template: `html` function][8]
+  - [Rendering into a container][9]
+- [🧪 Full example][10]
+- [⚙️ Installation][11]
+  - [Import from CDN as ES Module][12]
+  - [Or install the package locally][13]
+  - [Other import methods][14]
 
 ---
 
-<img src="https://raw.githubusercontent.com/elementumjs/template/develop/assets/how-to-use-it.svg"/>
+<img src="https://raw.githubusercontent.com/elementumjs/template/master/assets/how-to-use-it.svg"/>
 
 ### How to use it
 
@@ -51,11 +52,11 @@ To render the template into a container `HTMLElement`, the data to fill the temp
     render(template(counter), document.body /* the container to render the template */);
 ```
 
-<img src="https://raw.githubusercontent.com/elementumjs/template/develop/assets/full-example.svg"/>
+<img src="https://raw.githubusercontent.com/elementumjs/template/master/assets/full-example.svg"/>
 
 ### Full example
 
-<img src="https://raw.githubusercontent.com/elementumjs/template/develop/assets/demo.gif" width="350"/>
+<img src="https://raw.githubusercontent.com/elementumjs/template/master/assets/demo.gif" width="350"/>
 
 ```javascript
     // import { html, render } from "https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.esm.js";
@@ -77,13 +78,13 @@ To render the template into a container `HTMLElement`, the data to fill the temp
     }, 1000);
 ```
 
-<img src="https://raw.githubusercontent.com/elementumjs/template/develop/assets/installation.svg"/>
+<img src="https://raw.githubusercontent.com/elementumjs/template/master/assets/installation.svg"/>
 
 ### Installation
 
 #### Import from CDN as ES Module
 
-Import from  [jsDelivr CDN]():
+Import from [jsDelivr CDN](https://www.jsdelivr.com/):
 
 ```javascript
     import { html, render } from "https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.esm.js";
@@ -133,20 +134,18 @@ Checkout other import methods in [`dist/README.md`](./dist/README.md).
 
 [6]: LICENSE
 
-[7]: #template
+[7]: #how-to-use-it
 
-[8]: #how-to-use-it
+[8]: #creating-a-template-html-function
 
-[9]: #creating-a-template-html-function
+[9]: #rendering-into-a-container
 
-[10]: #rendering-into-a-container
+[10]: #full-example
 
-[11]: #full-example
+[11]: #installation
 
-[12]: #installation
+[12]: #import-from-cdn-as-es.module
 
-[13]: #import-from-cdn-as-es.module
+[13]: #or-install-the-package-locally
 
-[14]: #or-install-the-package-locally
-
-[15]: #other-import-methods
+[14]: #other-import-methods

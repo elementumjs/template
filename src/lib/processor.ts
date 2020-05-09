@@ -9,7 +9,7 @@ import { Template, Slot } from "./template";
 const acceptNode = (node: Node): number => {
     const { nodeType, nodeValue } = node;
 
-    return (nodeType === Node.COMMENT_NODE && !!parseInt(nodeValue)) ?
+    return nodeType === Node.COMMENT_NODE && !!parseInt(nodeValue) ?
         NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
 }
 
@@ -45,10 +45,10 @@ class Processor {
         // Creates a {@link TreeWalker} to iterates over container child nodes.
         // It uses acceptFilter to get the slot marks ({@link Comment} elements 
         // that includes an index).
-        const walker = document.createTreeWalker(
-            this.container, 
-            NodeFilter.SHOW_COMMENT, 
-            { acceptNode }, 
+        const walker: TreeWalker = document.createTreeWalker(
+            this.container,
+            NodeFilter.SHOW_COMMENT,
+            { acceptNode },
             false
         );
 
