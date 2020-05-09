@@ -118,7 +118,7 @@ Install via `npm`:
 
 #### Other import methods
 
-Checkout other import methods in [`dist/README.md`](./dist/README.md).
+Checkout other import methods in [`dist/README.md`](https://github.com/elementumjs/template/tree/master/dist/README.md).
 
 [0]: assets/header.png
 
