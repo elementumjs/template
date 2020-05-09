@@ -113,7 +113,7 @@ Install via `npm`:
 [ES Module](http://exploringjs.com/es6/ch_modules.html) builds are intended for use with modern bundlers like [webpack 2](https://webpack.js.org) or [rollup](http://rollupjs.org/). Use it with ES6 JavaScript `import`:
   
 ```javascript
-    import { html, val } from '@elementumjs/template';
+    import { html, render } from '@elementumjs/template';
 ```
 
 #### Other import methods
