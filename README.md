@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/elementumjs/template/master/assets/header.png"/>
+<img src="https://raw.githubusercontent.com/elementumjs/template/master/assets/header.svg"/>
 
 [![CDN](https://img.shields.io/badge/CDN-jsDelivr-blueviolet)][1]
 [![package_version](https://img.shields.io/github/package-json/v/elementumjs/template)][2]
