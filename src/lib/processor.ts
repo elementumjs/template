@@ -45,11 +45,10 @@ class Processor {
         // Creates a {@link TreeWalker} to iterates over container child nodes.
         // It uses acceptFilter to get the slot marks ({@link Comment} elements 
         // that includes an index).
-        const walker: TreeWalker = document.createTreeWalker(
+        const walker: NodeIterator = document.createNodeIterator(
             this.container,
             NodeFilter.SHOW_COMMENT,
-            { acceptNode },
-            false
+            { acceptNode }
         );
 
         // Gets the first mark founded to check if the container has the 
@@ -104,7 +103,14 @@ class Processor {
                 if (attr !== null) {
                     const current = (node as HTMLElement).getAttribute(attr);
                     if (current !== value) (node as HTMLElement).setAttribute(attr, value);
-                } else if (node.nodeValue != value) node.nodeValue = value;
+                } else if (node.nodeValue !== value) {
+                    // If the initial slot value is empty no text node is 
+                    // created, and the provided node as target is the end 
+                    // commment mark, so initalizes the target text node with 
+                    // the value and insert before the end comment mark.
+                    if (node.nodeType !== Node.COMMENT_NODE) node.nodeValue = value;
+                    else node.parentNode.insertBefore(document.createTextNode(value), node);
+                }
             }
         }
     }
