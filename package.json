@@ -1,6 +1,6 @@
 {
   "name": "@elementumjs/template",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "Simple HTML template engine for vanilla WebComponents",
   "files": [
     "src/*.js",
