@@ -89,7 +89,7 @@ class Template {
      * the template strings composing each slot.
      * @param {Array} values - The current values of the slots
      */
-    prepare(values: Array<any>) {
+    private prepare(values: Array<any>) {
         // Creates a variable to store the current slot index and iterates over
         // template strings identifying the current slot and parse it.
         let slotIndex: number = 0;
