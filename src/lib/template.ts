@@ -97,10 +97,22 @@ class Template {
         for (let i = 0; i < length; i++) {
             // Gets the current string and value to create the slot.
             const part: string = this.strings[i];
-            const value: number = values[i];
+            let value: any = values[i];
 
-            // Checks if the current string is an attribute using a 
-            // {@link Regex}.
+            // When slot value its a function, removes de function body and 
+            // keeps the function name as reference.
+            if (typeof value === 'function') {
+                const name = (value as Function).name;
+                if (name === '') {
+                    const error = 'injected functions cannot be inlined.' +
+                        'Please define the function outside and reference it ' +
+                        'by its name. Ex.: <button onclick="${fn}">';
+                    throw new Error(error);
+                }
+                value = `${name}()`;
+            }
+
+            // Checks if the current string is an attribute using a {@link Regex}.
             const result: RegExpExecArray = attributeNameAndPrefixRgx.exec(part);
             if (result !== null) {
                 // If it is an attribute, identifies the initial position of the
