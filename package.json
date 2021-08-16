@@ -9,9 +9,6 @@
   "main": "dist/template.cjs.js",
   "module": "dist/template.esm.js",
   "browser": "dist/template.umd.js",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "scripts": {
     "test": "jest --config=build/jest.config.js",
     "build": "NODE_ENV=production rollup -c build/rollup.config.js",
