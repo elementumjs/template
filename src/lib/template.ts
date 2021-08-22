@@ -16,6 +16,12 @@ interface Slot {
 const openingHint: string = "<";
 
 /**
+ * endMarkNeedle string contains the nodeValue of the comment nodes that mark 
+ * the end of a slot.
+ */
+const endMarkNeedle: string = "-";
+
+/**
  * markGenerator function returns a HTML comment string definition with the slot
  * mark content as value.
  * @param {*} needle - Content to place into the mark
@@ -71,27 +77,37 @@ class Template {
             // Gets attribute and value parameter of the slot and append it to 
             // the after the current string.
             let { attr, value } = this.slots[i];
-            if (Array.isArray(value)) value = value.join('');
+            // If the value is an array, it joins each string representation.
+            if (Array.isArray(value)) value = value.join("");
 
             htmlDef += this.strings[i] + value;
 
             // Checks if is an interpolation to append to it the end mark.
             // An end mark is a HTML Comment with a dash as content.
-            if (attr === null) htmlDef += markGenerator("-");
+            if (attr === null) htmlDef += markGenerator(endMarkNeedle);
         }
         
         // Returns the result of the iterations, appending to it the last 
         // string part.
         return htmlDef + this.strings[last];
     }
-
+    
+    /**
+     * element returns a generated DocumentFragment element with the template
+     * html definition inside of it.
+     * @returns {DocumentFragment} The generated HTML element.
+     */
     get element(): DocumentFragment {
         const range: Range = document.createRange();
         return range.createContextualFragment(this.html);
     }
-
+    
+    /**
+     * Returns the composed template definition as string.
+     * @returns {string} The composed html string definition.
+     */
     toString(): string { return this.html; }
-
+    
     /**
      * prepare functions detect the slots in the current template, its type 
      * between interpolation and attribute, and the slot index. Iterates over 
@@ -200,4 +216,4 @@ class Template {
     }
 }
 
-export { Slot, Template };
+export { Slot, Template, endMarkNeedle };

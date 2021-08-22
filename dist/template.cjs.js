@@ -7,6 +7,11 @@ Object.defineProperty(exports, '__esModule', { value: true });
  */
 var openingHint = "<";
 /**
+ * endMarkNeedle string contains the nodeValue of the comment nodes that mark
+ * the end of a slot.
+ */
+var endMarkNeedle = "-";
+/**
  * markGenerator function returns a HTML comment string definition with the slot
  * mark content as value.
  * @param {*} needle - Content to place into the mark
@@ -55,13 +60,14 @@ var Template = /** @class */ (function () {
                 // Gets attribute and value parameter of the slot and append it to 
                 // the after the current string.
                 var _a = this.slots[i], attr = _a.attr, value = _a.value;
+                // If the value is an array, it joins each string representation.
                 if (Array.isArray(value))
-                    value = value.join('');
+                    value = value.join("");
                 htmlDef += this.strings[i] + value;
                 // Checks if is an interpolation to append to it the end mark.
                 // An end mark is a HTML Comment with a dash as content.
                 if (attr === null)
-                    htmlDef += markGenerator("-");
+                    htmlDef += markGenerator(endMarkNeedle);
             }
             // Returns the result of the iterations, appending to it the last 
             // string part.
@@ -71,6 +77,11 @@ var Template = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(Template.prototype, "element", {
+        /**
+         * element returns a generated DocumentFragment element with the template
+         * html definition inside of it.
+         * @returns {DocumentFragment} The generated HTML element.
+         */
         get: function () {
             var range = document.createRange();
             return range.createContextualFragment(this.html);
@@ -78,6 +89,10 @@ var Template = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    /**
+     * Returns the composed template definition as string.
+     * @returns {string} The composed html string definition.
+     */
     Template.prototype.toString = function () { return this.html; };
     /**
      * prepare functions detect the slots in the current template, its type
@@ -236,17 +251,23 @@ var Processor = /** @class */ (function () {
             // mark).
             var nodeValue = current.nodeValue;
             var slotIndex = parseInt(nodeValue);
-            // Prevent enter into child Templates definitions.
+            // The template slots have consecutive slot indexes, so the next 
+            // valid slot must have a higher slot index than the previous one. 
+            // If not, the next slot is relative to another child template.
             if (slotIndex > lastSlotIndex) {
-                // Search for all the slot nodes iterating over siblings until
-                // catch a end mark comment node.
+                // A slot could have more than one node affected, such as the 
+                // lists of elements. So it is necessary to search for all the 
+                // slot nodes iterating over siblings until catch an end mark 
+                // comment node.
                 var currentSibling = current.nextSibling;
                 var slotNodes = [];
                 while (currentSibling.nodeType !== Node.COMMENT_NODE &&
-                    currentSibling.nodeValue !== '-') {
+                    currentSibling.nodeValue !== endMarkNeedle) {
                     slotNodes.push(currentSibling);
                     currentSibling = currentSibling.nextSibling;
                 }
+                // If more than one node is found, all of them are committed, 
+                // if only one is found it is committed individually.
                 if (slotNodes.length > 1)
                     this.commitNodes(slotNodes, slotIndex);
                 else
@@ -257,6 +278,25 @@ var Processor = /** @class */ (function () {
         }
     };
     /**
+     * getSlotByIndex method iterates over the current template definition slots
+     * searching for a slot with the same index that the provided one.
+     * @param {number} slotIndex The index of the slot to search.
+     * @returns {Slot} - The desired slot.
+     */
+    Processor.prototype.getSlotByIndex = function (slotIndex) {
+        // Iterates over the template slots to get the correct one by provided
+        // index.
+        var slot;
+        var length = this.template.slots.length;
+        for (var i = 0; i < length; i++) {
+            // Search for the slot with the current index.
+            slot = this.template.slots[i];
+            if (slot.slotIndex === slotIndex)
+                return slot;
+        }
+        throw new Error('slot not found');
+    };
+    /**
      * commitNode gets the slot referenced by the index and compares its value
      * with the target node value. If its not equal, the target node will be
      * updated.
@@ -264,79 +304,86 @@ var Processor = /** @class */ (function () {
      * @param {number} slotIndex - The index of the slot referenced.
      */
     Processor.prototype.commitNode = function (node, slotIndex) {
-        // Iterates over the template slots to get the correct one by slotIndex
-        // provided.
-        var length = this.template.slots.length;
-        for (var i = 0; i < length; i++) {
-            // Checks if current slot has the same slotIndex that the provided.
-            var slot = this.template.slots[i];
-            if (slot.slotIndex === slotIndex) {
-                // If a slot is found, gets the current attr and value slot
-                // parameters.
-                var attr = slot.attr, value = slot.value;
-                // If the slot attr parameter is not undefined, the slot is an 
-                // attr. It gets the current attribute value to compare with the
-                // slot value, if its not equal, the node attribute is updated.
-                // If the slot is an interpolation, compares its value with the
-                // slot value, if they are not equal, the target value is 
-                // updated with the new one.
-                if (Array.isArray(value))
-                    this.commitNodes([node], slotIndex);
-                else if (value instanceof Template) {
-                    var current = node.outerHTML;
-                    if (current !== value.html)
-                        new Processor(value, node).render();
-                }
-                else if (attr !== null) {
-                    var current = node.getAttribute(attr);
-                    if (current !== value)
-                        node.setAttribute(attr, value);
-                }
-                else if (node.nodeValue !== value) {
-                    // If the initial slot value is empty no text node is 
-                    // created, and the provided node as target is the end 
-                    // commment mark, so initalizes the target text node with 
-                    // the value and insert before the end comment mark.
-                    if (node.nodeType !== Node.COMMENT_NODE)
-                        node.nodeValue = value;
-                    else
-                        node.parentNode.insertBefore(document.createTextNode(value), node);
-                }
-                break;
-            }
+        // Search for the slot and gets the current attr and value slot 
+        // parameters.
+        var slot = this.getSlotByIndex(slotIndex);
+        var attr = slot.attr, value = slot.value;
+        // If the slot value is an array, creates an array of nodes and 
+        // commit all the values at the same time.
+        // If the value is another {@link Template} and the current html 
+        // definition is not equal that the new one, creates a new
+        // {@link Processor} with the {@link Template} instance and 
+        // the current node as container. 
+        // If the slot attr parameter is not undefined, the slot is an 
+        // attr. It gets the current attribute value to compare with the
+        // slot value, if its not equal, the node attribute is updated.
+        // If the slot is an interpolation, compares its value with the
+        // slot value, if they are not equal, the target value is 
+        // updated with the new one.
+        if (Array.isArray(value))
+            this.commitNodes([node], slotIndex);
+        else if (value instanceof Template) {
+            var current = node.outerHTML;
+            if (current !== value.html)
+                new Processor(value, node).render();
+        }
+        else if (attr !== null) {
+            var current = node.getAttribute(attr);
+            if (current !== value)
+                node.setAttribute(attr, value);
+        }
+        else if (node.nodeValue !== value) {
+            // If the initial slot value is empty no text node is 
+            // created, and the provided node as target is the end 
+            // commment mark, so initalizes the target text node with 
+            // the value and insert before the end comment mark.
+            if (node.nodeType !== Node.COMMENT_NODE)
+                node.nodeValue = value;
+            else
+                node.parentNode.insertBefore(document.createTextNode(value), node);
         }
     };
+    /**
+     * commitNodes gets the slot referenced by the index and compares its values
+     * with the targets nodes values. If any of them is not equal, the target
+     * node will be updated.
+     * @param {Array<Node>} slotNodes The list of the slot nodes.
+     * @param {number} slotIndex The index of the slot.
+     */
     Processor.prototype.commitNodes = function (slotNodes, slotIndex) {
-        // Iterates over the template slots to get the correct one by slotIndex
-        // provided.
-        var slot;
-        var length = this.template.slots.length;
-        for (var i = 0; i < length; i++) {
-            // Checks if current slot has the same slotIndex that the provided.
-            slot = this.template.slots[i];
-            if (slot.slotIndex === slotIndex)
-                break;
-        }
+        // Gets the referenced slot and its values.
+        var slot = this.getSlotByIndex(slotIndex);
         var slotValues = slot.value;
+        // Calculate the limit of the iteration that is the highest length 
+        // between the nodes list and values list.
         var valuesLength = slotValues.length;
         var nodesLength = slotNodes.length;
         var limit = valuesLength > nodesLength ?
             valuesLength : nodesLength;
+        // Iterate over values and nodes updating them. It throw an error if any
+        // of slot values is not a Template instance. If a iteration step has 
+        // not a target node it will be a new element. If a iteration step has
+        // not a slot value associated, the target node must be removed. If a
+        // iteration step has both args, the target node and the slot value,
+        // the target node is updated.
         for (var i = 0; i < limit; i++) {
             var _a = [slotNodes[i], slotValues[i]], node = _a[0], value = _a[1];
-            // if (!(value instanceof Template)) throw new Error('to render a template into a list, every list items must be a Template instance.');
-            if (node === undefined) {
-                var prevNode = slotNodes[i - 1];
-                prevNode.parentNode.insertBefore(value.element, prevNode.nextSibling);
+            if (!(value instanceof Template)) {
+                var error = 'to render a template into a list, every list ' +
+                    'items must be a Template instance.';
+                throw new Error(error);
             }
-            else if (value === undefined) {
-                node.parentNode.removeChild(node);
-            }
-            else {
+            if (node !== undefined && value !== undefined) {
                 var current = node.outerHTML;
                 if (current !== value.html)
                     new Processor(value, node).render();
             }
+            else if (node === undefined) {
+                var prevNode = slotNodes[i - 1];
+                prevNode.parentNode.insertBefore(value.element, prevNode.nextSibling);
+            }
+            else
+                node.parentNode.removeChild(node);
         }
     };
     return Processor;
