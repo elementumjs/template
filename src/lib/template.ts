@@ -70,7 +70,9 @@ class Template {
         for (let i = 0; i < last; i++) {
             // Gets attribute and value parameter of the slot and append it to 
             // the after the current string.
-            const { attr, value } = this.slots[i];
+            let { attr, value } = this.slots[i];
+            if (Array.isArray(value)) value = value.join('');
+
             htmlDef += this.strings[i] + value;
 
             // Checks if is an interpolation to append to it the end mark.
@@ -82,6 +84,13 @@ class Template {
         // string part.
         return htmlDef + this.strings[last];
     }
+
+    get element(): DocumentFragment {
+        const range: Range = document.createRange();
+        return range.createContextualFragment(this.html);
+    }
+
+    toString(): string { return this.html; }
 
     /**
      * prepare functions detect the slots in the current template, its type 

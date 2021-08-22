@@ -21,7 +21,7 @@ const acceptNode = (node: Node): number => {
  */
 class Processor {
     template: Template;
-    container: HTMLElement;
+    container: HTMLElement | Node;
 
     /**
      * Processor constructor receives the template to process and the container 
@@ -30,7 +30,7 @@ class Processor {
      * @param {Template} template - The template to process.
      * @param {HTMLElement} container - The container to render the template.
      */
-    constructor(template: Template, container: HTMLElement) {
+    constructor(template: Template, container: HTMLElement | Node) {
         this.template = template;
         this.container = container;
     }
@@ -41,7 +41,7 @@ class Processor {
      * to render them. If it was not rendered, it appends the template to the 
      * container.
      */
-    render() {
+    render(): void {
         // Creates a {@link TreeWalker} to iterates over container child nodes.
         // It uses acceptFilter to get the slot marks ({@link Comment} elements 
         // that includes an index).
@@ -57,19 +57,36 @@ class Processor {
         if (current === null) {
             // If the first mark founded is null, the template was not detected 
             // and it is appended to the container.
-            const range: Range = document.createRange();
-            const html: DocumentFragment = range.createContextualFragment(this.template.html);
-            this.container.appendChild(html);
+            this.container.appendChild(this.template.element);
             return;
         }
 
+        let lastSlotIndex: number = 0;
         while (current) {
             // Iterate over the found marks getting their slot index and 
             // committing the current node (the sibling of the {@link Node}
             // mark).
             const { nodeValue } = current;
             const slotIndex: number = parseInt(nodeValue);
-            this.commitNode(current.nextSibling, slotIndex);
+            
+            // Prevent enter into child Templates definitions.
+            if (slotIndex > lastSlotIndex) {
+                // Search for all the slot nodes iterating over siblings until
+                // catch a end mark comment node.
+                let currentSibling: Node = current.nextSibling;
+                const slotNodes: Array<Node> = [];
+                while (
+                    currentSibling.nodeType !== Node.COMMENT_NODE &&
+                    currentSibling.nodeValue !== '-'
+                ) {
+                    slotNodes.push(currentSibling);
+                    currentSibling = currentSibling.nextSibling;
+                }
+
+                if (slotNodes.length > 1) this.commitNodes(slotNodes, slotIndex);
+                else this.commitNode(current.nextSibling, slotIndex);
+                lastSlotIndex = slotIndex;
+            }
 
             current = walker.nextNode();
         }
@@ -82,17 +99,17 @@ class Processor {
      * @param {Node} node - The target node of the slot.
      * @param {number} slotIndex - The index of the slot referenced.
      */
-    commitNode(node: HTMLElement | Node, slotIndex: number) {
+    commitNode(node: HTMLElement | Node, slotIndex: number): void {
         // Iterates over the template slots to get the correct one by slotIndex
         // provided.
         const { length } = this.template.slots;
-        for (let i = 0; i < length; i++) {
+        for (let i: number = 0; i < length; i++) {
             // Checks if current slot has the same slotIndex that the provided.
             const slot: Slot = this.template.slots[i];
             if (slot.slotIndex === slotIndex) {
                 // If a slot is found, gets the current attr and value slot
                 // parameters.
-                const { attr, value } = this.template.slots[i];
+                const { attr, value } = slot;
 
                 // If the slot attr parameter is not undefined, the slot is an 
                 // attr. It gets the current attribute value to compare with the
@@ -100,7 +117,11 @@ class Processor {
                 // If the slot is an interpolation, compares its value with the
                 // slot value, if they are not equal, the target value is 
                 // updated with the new one.
-                if (attr !== null) {
+                if (Array.isArray(value)) this.commitNodes([ node ], slotIndex);
+                else if (value instanceof Template) {
+                    const current = (node as HTMLElement).outerHTML;
+                    if (current !== value.html) new Processor(value, node).render();
+                } else if (attr !== null) {
                     const current = (node as HTMLElement).getAttribute(attr);
                     if (current !== value) (node as HTMLElement).setAttribute(attr, value);
                 } else if (node.nodeValue !== value) {
@@ -111,6 +132,42 @@ class Processor {
                     if (node.nodeType !== Node.COMMENT_NODE) node.nodeValue = value;
                     else node.parentNode.insertBefore(document.createTextNode(value), node);
                 }
+
+                break;
+            }
+        }
+    }
+
+    commitNodes(slotNodes: Array<Node>, slotIndex: number): void {
+        // Iterates over the template slots to get the correct one by slotIndex
+        // provided.
+        let slot: Slot
+        const { length } = this.template.slots;
+        for (let i: number = 0; i < length; i++) {
+            // Checks if current slot has the same slotIndex that the provided.
+            slot = this.template.slots[i];
+            if (slot.slotIndex === slotIndex) break;
+        }
+
+        const slotValues: Array<any> = slot.value;
+        const valuesLength: number = slotValues.length;
+        const nodesLength: number = slotNodes.length;
+
+        const limit: number = valuesLength > nodesLength ? 
+            valuesLength : nodesLength;
+
+        for (let i: number = 0; i < limit; i++) {
+            const [ node, value ] = [ slotNodes[i], slotValues[i] ];
+
+            // if (!(value instanceof Template)) throw new Error('to render a template into a list, every list items must be a Template instance.');
+            if (node === undefined) {
+                const prevNode = slotNodes[i - 1];
+                prevNode.parentNode.insertBefore(value.element, prevNode.nextSibling);
+            } else if (value === undefined) {
+                node.parentNode.removeChild(node);
+            } else {
+                const current = (node as HTMLElement).outerHTML;
+                if (current !== value.html) new Processor(value, node).render();
             }
         }
     }
