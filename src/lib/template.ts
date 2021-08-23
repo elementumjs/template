@@ -1,13 +1,23 @@
 /**
  * Slot object abstracts a fillable slot of a template.
  */
-interface Slot {
+class Slot {
     /** The attribute index */
     slotIndex: number;
     /** The attribute name */
     attr?: string;
     /** The value of the field */
     value: any;
+
+    get isAttr(): boolean {
+        return this.attr !== null && this.attr !== undefined;
+    }
+
+    constructor(index: number, value: any, attr?: string) {
+        this.slotIndex = index;
+        this.attr = attr;
+        this.value = value;
+    }
 }
 
 /**
@@ -27,6 +37,8 @@ const endMarkNeedle: string = "-";
  * @param {*} needle - Content to place into the mark
  */
 const markGenerator = (needle: any): string => `<!--${ needle }-->`;
+
+const escapePart = (part: string): string => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 /**
  * Regex expressions to detect attributes name and its prefix.
@@ -79,7 +91,6 @@ class Template {
             let { attr, value } = this.slots[i];
             // If the value is an array, it joins each string representation.
             if (Array.isArray(value)) value = value.join("");
-
             htmlDef += this.strings[i] + value;
 
             // Checks if is an interpolation to append to it the end mark.
@@ -89,7 +100,35 @@ class Template {
         
         // Returns the result of the iterations, appending to it the last 
         // string part.
-        return htmlDef + this.strings[last];
+        htmlDef += this.strings[last];
+        return htmlDef;
+    }
+
+    get regexp(): RegExp {
+        // Creates a variable to store the html string definition and append the
+        // formated part in each iteration.
+        let htmlDef: string = "";
+
+        // Iterates over strings items appending its slot value. If the slot is 
+        // an interpolation, the end mark is appended after slot value.
+        const last: number = this.strings.length - 1;
+        for (let i = 0; i < last; i++) {
+            // Gets attribute and value parameter of the slot and append it to 
+            // the after the current string.
+            const { attr } = this.slots[i];
+            // If the value is an array, it joins each string representation.
+            htmlDef += escapePart(this.strings[i]) + '(.*)';
+
+            // Checks if is an interpolation to append to it the end mark.
+            // An end mark is a HTML Comment with a dash as content.
+            if (attr === null) htmlDef += escapePart(markGenerator(endMarkNeedle));
+        }
+        
+        // Returns the result of the iterations, appending to it the last 
+        // string part.
+        htmlDef += escapePart(this.strings[last]);
+        //return new RegExp(htmlDef.replace(/\s|\r|\n/gm, ''));
+        return new RegExp(htmlDef);
     }
     
     /**
@@ -199,18 +238,15 @@ class Template {
                 // Stores the slot composing its value withe the current value,
                 // its prefix, the following components of the attribute and its
                 // suffix.
-                this.slots.push({ 
-                    slotIndex, 
-                    attr, 
-                    value: prefix + value + following + suffix 
-                });
+                const slotValue = prefix + value + following + suffix;
+                this.slots.push(new Slot(slotIndex, slotValue, attr));
             } else {
                 // If it is an interpoltation, the string is updated with the
                 // mark and its index, the slot index is updated and the slot 
                 // is stored.
                 slotIndex++;
                 this.strings[i] = part + markGenerator(slotIndex);
-                this.slots.push({ slotIndex, attr: null, value });
+                this.slots.push(new Slot(slotIndex, value));
             }
         }
     }

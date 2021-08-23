@@ -15,14 +15,14 @@ test("Processor.commitNode", () => {
     const processor: Processor = new Processor(template, document.body);
     
     const paragraph: HTMLElement = document.createElement("p");
-    processor.commitNode(paragraph, 1);
+    processor['commitNode'](paragraph, 1);
     expect(paragraph.getAttribute("class")).toBe(data[0]);
 
     const textNode: Node = document.createTextNode("test");
-    processor.commitNode(textNode, 2);
+    processor['commitNode'](textNode, 2);
     expect(textNode.nodeValue).toBe(data[1]);
 
     const contentNode: Node = document.createTextNode("test");
-    processor.commitNode(contentNode, 3);
+    processor['commitNode'](contentNode, 3);
     expect(contentNode.nodeValue).toBe(data[2]);
 });
