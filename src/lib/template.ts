@@ -1,24 +1,4 @@
-/**
- * Slot object abstracts a fillable slot of a template.
- */
-class Slot {
-    /** The attribute index */
-    slotIndex: number;
-    /** The attribute name */
-    attr?: string;
-    /** The value of the field */
-    value: any;
-
-    get isAttr(): boolean {
-        return this.attr !== null && this.attr !== undefined;
-    }
-
-    constructor(index: number, value: any, attr?: string) {
-        this.slotIndex = index;
-        this.attr = attr;
-        this.value = value;
-    }
-}
+import { Slot } from './slot';
 
 /**
  * openingHint string contains and empty Comment representation. 
@@ -93,15 +73,12 @@ class Template {
             if (Array.isArray(value)) value = value.join("");
             htmlDef += this.strings[i] + value;
 
-            // Checks if is an interpolation to append to it the end mark.
-            // An end mark is a HTML Comment with a dash as content.
-            if (attr === null) htmlDef += markGenerator(endMarkNeedle);
+            if (!this.slots[i].isAttr) htmlDef += markGenerator("-");
         }
         
         // Returns the result of the iterations, appending to it the last 
         // string part.
-        htmlDef += this.strings[last];
-        return htmlDef;
+        return htmlDef + this.strings[last];
     }
 
     get regexp(): RegExp {
@@ -113,21 +90,13 @@ class Template {
         // an interpolation, the end mark is appended after slot value.
         const last: number = this.strings.length - 1;
         for (let i = 0; i < last; i++) {
-            // Gets attribute and value parameter of the slot and append it to 
-            // the after the current string.
-            const { attr } = this.slots[i];
-            // If the value is an array, it joins each string representation.
             htmlDef += escapePart(this.strings[i]) + '(.*)';
-
-            // Checks if is an interpolation to append to it the end mark.
-            // An end mark is a HTML Comment with a dash as content.
-            if (attr === null) htmlDef += escapePart(markGenerator(endMarkNeedle));
+            if (!this.slots[i].isAttr) htmlDef += escapePart(markGenerator("-"));
         }
         
         // Returns the result of the iterations, appending to it the last 
         // string part.
         htmlDef += escapePart(this.strings[last]);
-        //return new RegExp(htmlDef.replace(/\s|\r|\n/gm, ''));
         return new RegExp(htmlDef);
     }
     
@@ -145,7 +114,12 @@ class Template {
      * Returns the composed template definition as string.
      * @returns {string} The composed html string definition.
      */
-    toString(): string { return this.html; }
+    public toString(): string { return this.html; }
+
+    public match(node: Node | HTMLElement): boolean {
+        const def = (node as HTMLElement).outerHTML;
+        return this.regexp.test(def);
+    }
     
     /**
      * prepare functions detect the slots in the current template, its type 
