@@ -1,34 +1,13 @@
+import {
+    openingHint,
+    endMarkNeedle,
+    markGenerator,
+    escapePart,
+    attributeNameAndPrefixRgx,
+    attributeSufixRgx
+} from './common';
+
 import { Slot } from './slot';
-
-/**
- * openingHint string contains and empty Comment representation. 
- */
-const openingHint: string = "<";
-
-/**
- * endMarkNeedle string contains the nodeValue of the comment nodes that mark 
- * the end of a slot.
- */
-const endMarkNeedle: string = "-";
-
-/**
- * markGenerator function returns a HTML comment string definition with the slot
- * mark content as value.
- * @param {*} needle - Content to place into the mark
- */
-const markGenerator = (needle: any): string => `<!--${ needle }-->`;
-
-const escapePart = (part: string): string => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-/**
- * Regex expressions to detect attributes name and its prefix.
- */ 
-const attributeNameAndPrefixRgx: RegExp = /\s(\S+)\=[\"\']([^\"]*)$/;
-
-/**
- * Regex expressions to catchs the slot attribute sufix.
- */
-const attributeSufixRgx: RegExp = /^([^\"]*)[\"|\'][\s|\>]/;
 
 /**
  * Template class abstracts the current template strings, args and slots.

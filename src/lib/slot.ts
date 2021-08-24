@@ -1,5 +1,6 @@
+import { endMarkNeedle } from "./common";
 import { Processor } from "./processor";
-import { Template, endMarkNeedle } from "./template";
+import type { Template } from "./template";
 
 /**
  * Slot object abstracts a fillable slot of a template.
@@ -47,19 +48,14 @@ class Slot {
                 }
                 this.commitTemplates(slotNodes, startMark, endMark, slotValue);
             } else {
-                const target: Node = startMark.nextSibling;
-                if (slotValue instanceof Template) {
-                    this.commitTemplate(target, startMark, slotValue);
-                } else this.commitValue(target, startMark, slotValue);
+                const node: Node = startMark.nextSibling;
+                if (slotValue.constructor.name === "Template") {
+                    this.commitTemplate(node, startMark, slotValue);
+                } else this.commitValue(node, startMark, slotValue);
             }
         } else this.commitAttr(startMark.nextSibling);
     }
 
-    /**
-     * 
-     * @param node 
-     * @param slot 
-     */
     private commitAttr(node: HTMLElement | Node): void {
         const { attr } = this;
         const value = Array.isArray(this.value) ? 
@@ -70,9 +66,6 @@ class Slot {
     }
 
     private commitValue(node: Node, startMark: Node, value: any): void {
-        // If the {@link Node.nextSibling} is `undefined`, 
-        // {@link Node.insertBefore} will insert the element at the  end of the 
-        // parent {@link Node.childNodes}.
         if (node === undefined || node === null) {
             startMark.parentNode.insertBefore(
                 document.createTextNode(value), 
@@ -82,8 +75,6 @@ class Slot {
     }
 
     private commitTemplate(node: Node, startMark: Node, template: Template) {
-        // Compare the html defintion of the current node with the new one 
-        // before update it.
         if (node === undefined) {
             startMark.parentNode.insertBefore(template.element, startMark.nextSibling);
         } else if (node.nodeType === Node.COMMENT_NODE) {
@@ -105,19 +96,16 @@ class Slot {
         for (let i: number = 0; i < limit; i++) {
             const [ node, template ] = [nodes[i], templates[i] ];
             
-            // If the current {@link Node} has not value, remove the {@link Node}.
+            // If the current {@link Node} has not value, remove the 
+            // current {@link Node}.
             if (template !== undefined) {
                 // Throws an error if any of slot values is not a Template instance. 
-                if (!(template instanceof Template)) {
+                if (template.constructor.name !== "Template") {
                     const error = 'to render a template into a list, every list '+ 
                         'items must be a Template instance.';
                     throw new Error(error);
                 }
 
-                // If a iteration step has not a target node it will be a new 
-                // element. If a iteration step has not a slot value associated, the
-                // target node must be removed. If a iteration step has both args, 
-                // the target node and the slot value, the target node is updated.
                 this.commitTemplate(node || endMark, startMark, template);
             } else if (node !== undefined) node.parentNode.removeChild(node);
         }

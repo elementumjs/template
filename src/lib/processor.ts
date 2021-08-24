@@ -1,17 +1,5 @@
-import { Template, Slot, endMarkNeedle } from "./template";
-
-/**
- * acceptNode its a function to filter Comment nodes with a number as nodeValue.
- * This kind of Comments represents the start of a template slot. 
- * @param {Node} node - Node candidate to filter.
- * @returns {number} Returns if node provided is allowed between 
- * {@link NodeFilter.FILTER_ACCEPT} and {@link NodeFilter.FILTER_REJECT}.
- */
-const acceptNode = (node: Node): number => {
-    const { nodeType, nodeValue } = node;
-    return nodeType === Node.COMMENT_NODE && !!parseInt(nodeValue) ?
-        NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
-}
+import { acceptNode } from "./common";
+import { Template, Slot } from "./template";
 
 /**
  * Processor class interprets a template, renders, and updates its slots into a 
@@ -72,7 +60,7 @@ class Processor {
         
         // Gets the first mark founded to check if the container has the 
         // template already rendered.
-        let current = walker.nextNode();
+        let current: Node = walker.nextNode();
         if (current === null) {
             // If the first mark founded is null, the template was not detected 
             // and it is appended to the container.
@@ -98,20 +86,6 @@ class Processor {
             current = walker.nextNode();
         }
     }
-
-    
-
-    
-    
-    
-    /////////////////////
-    //  Va a slot.ts   //
-    /////////////////////
-
-
-
-
-    
 }
 
 export { Processor };
