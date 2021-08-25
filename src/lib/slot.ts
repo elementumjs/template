@@ -1,5 +1,5 @@
 import { endHint } from "./common";
-import { IsNotTemplateError } from "./error";
+import { NotTemplateErr } from "./error";
 
 import { Processor } from "./processor";
 import type { Template } from "./template";
@@ -130,7 +130,7 @@ class Slot {
             if (template !== undefined) {
                 // Throws an error if any of slot values is not a Template instance. 
                 if (template.constructor.name !== "Template")
-                    throw IsNotTemplateError({ node, template });
+                    throw NotTemplateErr({ node, template });
 
                 this.commitTemplate(node || endMark, startMark, template);
             } else if (node !== undefined) node.parentNode.removeChild(node);

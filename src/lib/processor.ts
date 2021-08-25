@@ -1,4 +1,4 @@
-import { SlotNotFoundError } from "./error";
+import { NotSlotErr } from "./error";
 
 import type { Slot } from "./slot"; 
 import type { Template } from "./template";
@@ -54,7 +54,7 @@ class Processor {
             const slot: Slot = this.template.slots[i];
             if (slot.slotIndex === index) return slot;
         }
-        throw SlotNotFoundError({
+        throw NotSlotErr({
             template: this.template,
             slot: index
         });

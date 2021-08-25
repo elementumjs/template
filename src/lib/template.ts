@@ -5,7 +5,7 @@ import {
     startAttrParser,
     endAttrParser
 } from "./common";
-import { InlineFunctionError } from "./error";
+import { InlineFnErr } from "./error";
 
 import { Slot } from "./slot";
 
@@ -149,11 +149,11 @@ class Template {
             /**
              * When {@link Slot} value its a function, removes de function body 
              * and keeps the function name as reference. If the function is 
-             * inlined, raise an {@link InlineFunctionError}.
+             * inlined, raise an {@link InlineFnErr}.
              */
             if (typeof value === "function") {
                 const name = (value as Function).name;
-                if (name === "") throw InlineFunctionError({ part, value });
+                if (name === "") throw InlineFnErr({ part, value });
                 value = `${name}()`;
             }
 
