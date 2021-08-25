@@ -85,24 +85,24 @@
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     }
 
-    /**
-     *
-     */
+    /** ERROR_MESSAGES contains the list of human readables error messages. */
     var ERROR_MESSAGES = {
         1: "injected functions cannot be inlined. Please define the function outside and reference it by its name. Ex.: <button onclick='${fn}'>",
-        2: "requested slot is not found",
+        2: "the requested slot is not found",
         3: "to render a template into a list, every list items must be a Template instance."
     };
     /**
-     *
+     * TemplateError extends {@link Error} to provide custom errors to the library.
+     * It allows to manage the error message easely.
      */
     var TemplateError = /** @class */ (function (_super) {
         __extends(TemplateError, _super);
         /**
-         *
-         * @param message
-         * @param code
-         * @param metadata
+         * constructor method fill the class attributes of a {@link TemplateError}.
+         * @param {string} message Human readable error message to throw.
+         * @param {number} code The error code of the error message.
+         * @param {any} metadata The error metadata to append to the error as extra
+         * data to debug it.
          */
         function TemplateError(message, code, metadata) {
             if (code === void 0) { code = -1; }
@@ -114,10 +114,11 @@
             return _this;
         }
         /**
-         *
-         * @param code
-         * @param metadata
-         * @returns
+         * generate function a error by its code. Gets the error message from
+         * {@link ERROR_MESSAGES}.
+         * @param {number} code The numeric identifier of the error.
+         * @param {any=} metadata Extra data to append to the error to debug it.
+         * @returns {TemplateError} - The generated error.
          */
         TemplateError.generate = function (code, metadata) {
             var message = ERROR_MESSAGES[code];
@@ -129,25 +130,28 @@
         return TemplateError;
     }(Error));
     /**
-     *
-     * @param metadata
-     * @returns
+     * InlineFunctionError function creates a {@link TemplateError} using the error
+     * code {@link TemplateError.INLINE_FUNCTION}.
+     * @param metadata Extra data to append to the error to debug it.
+     * @returns {TemplateError} - The generated error.
      */
     var InlineFunctionError = function (metadata) {
         return TemplateError.generate(TemplateError.INLINE_FUNCTION, metadata);
     };
     /**
-     *
-     * @param metadata
-     * @returns
+     * SlotNotFoundError function creates a {@link TemplateError} using the error
+     * code {@link TemplateError.SLOT_NOT_FOUND}.
+     * @param metadata Extra data to append to the error to debug it.
+     * @returns {TemplateError} - The generated error.
      */
     var SlotNotFoundError = function (metadata) {
         return TemplateError.generate(TemplateError.SLOT_NOT_FOUND, metadata);
     };
     /**
-     *
-     * @param metadata
-     * @returns
+     * IsNotTemplateError function creates a {@link TemplateError} using the error
+     * code {@link TemplateError.NOT_TEMPLATE_VALUE}.
+     * @param metadata Extra data to append to the error to debug it.
+     * @returns {TemplateError} - The generated error.
      */
     var IsNotTemplateError = function (metadata) {
         return TemplateError.generate(TemplateError.NOT_TEMPLATE_VALUE, metadata);
