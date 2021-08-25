@@ -5,9 +5,10 @@ import {
     escapePart,
     attributeNameAndPrefixRgx,
     attributeSufixRgx
-} from './common';
+} from "./common";
+import { InlineFunctionError } from "./error";
 
-import { Slot } from './slot';
+import { Slot } from "./slot";
 
 /**
  * Template class abstracts the current template strings, args and slots.
@@ -28,6 +29,26 @@ class Template {
         this.slots = [];
 
         this.prepare(values);
+    }
+
+    private get regexp(): RegExp {
+        // Creates a variable to store the html string definition and append the
+        // formated part in each iteration.
+        let htmlDef: string = "";
+
+        // Iterates over strings items appending its slot value. If the slot is 
+        // an interpolation, the end mark is appended after slot value.
+        const last: number = this.strings.length - 1;
+        for (let i = 0; i < last; i++) {
+            htmlDef += escapePart(this.strings[i]) + "(.*)";
+            if (!this.slots[i].isAttr) 
+                htmlDef += escapePart(markGenerator(endMarkNeedle));
+        }
+        
+        // Returns the result of the iterations, appending to it the last 
+        // string part.
+        htmlDef += escapePart(this.strings[last]);
+        return new RegExp(htmlDef);
     }
 
     /**
@@ -52,31 +73,12 @@ class Template {
             if (Array.isArray(value)) value = value.join("");
             htmlDef += this.strings[i] + value;
 
-            if (!this.slots[i].isAttr) htmlDef += markGenerator("-");
+            if (!this.slots[i].isAttr) htmlDef += markGenerator(endMarkNeedle);
         }
         
         // Returns the result of the iterations, appending to it the last 
         // string part.
         return htmlDef + this.strings[last];
-    }
-
-    get regexp(): RegExp {
-        // Creates a variable to store the html string definition and append the
-        // formated part in each iteration.
-        let htmlDef: string = "";
-
-        // Iterates over strings items appending its slot value. If the slot is 
-        // an interpolation, the end mark is appended after slot value.
-        const last: number = this.strings.length - 1;
-        for (let i = 0; i < last; i++) {
-            htmlDef += escapePart(this.strings[i]) + '(.*)';
-            if (!this.slots[i].isAttr) htmlDef += escapePart(markGenerator("-"));
-        }
-        
-        // Returns the result of the iterations, appending to it the last 
-        // string part.
-        htmlDef += escapePart(this.strings[last]);
-        return new RegExp(htmlDef);
     }
     
     /**
@@ -95,6 +97,11 @@ class Template {
      */
     public toString(): string { return this.html; }
 
+    /**
+     * 
+     * @param node 
+     * @returns 
+     */
     public match(node: Node | HTMLElement): boolean {
         const def = (node as HTMLElement).outerHTML;
         return this.regexp.test(def);
@@ -118,14 +125,9 @@ class Template {
 
             // When slot value its a function, removes de function body and 
             // keeps the function name as reference.
-            if (typeof value === 'function') {
+            if (typeof value === "function") {
                 const name = (value as Function).name;
-                if (name === '') {
-                    const error = 'injected functions cannot be inlined.' +
-                        'Please define the function outside and reference it ' +
-                        'by its name. Ex.: <button onclick="${fn}">';
-                    throw new Error(error);
-                }
+                if (name === "") throw InlineFunctionError({ part, value });
                 value = `${name}()`;
             }
 
@@ -205,4 +207,4 @@ class Template {
     }
 }
 
-export { Slot, Template, endMarkNeedle };
+export { Template };

@@ -6,8 +6,6 @@
     "compilerOptions": {
         "rootDir": "../src",
         "target": "ES5",
-        // "outDir": "../dist",
-        // "declaration": true,
         "lib": [
             "es5", 
             "es6", 

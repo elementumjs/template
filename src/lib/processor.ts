@@ -1,5 +1,8 @@
 import { acceptNode } from "./common";
-import { Template, Slot } from "./template";
+import { SlotNotFoundError } from "./error";
+
+import type { Slot } from "./slot"; 
+import type { Template } from "./template";
 
 /**
  * Processor class interprets a template, renders, and updates its slots into a 
@@ -25,21 +28,24 @@ class Processor {
     }
 
     /**
-     * getSlotByIndex method iterates over the current template definition slots
+     * getSlot method iterates over the current template definition slots
      * searching for a slot with the same index that the provided one.
      * @param {number} slotIndex The index of the slot to search.
      * @returns {Slot} - The desired slot.
      */
-    private getSlotByIndex(slotIndex: number): Slot {
+    private getSlot(index: number): Slot {
         // Iterates over the template slots to get the correct one by provided
         // index.
         const { length } = this.template.slots;
         for (let i: number = 0; i < length; i++) {
             // Search for the slot with the current index.
             const slot: Slot = this.template.slots[i];
-            if (slot.slotIndex === slotIndex) return slot;
+            if (slot.slotIndex === index) return slot;
         }
-        throw new Error('slot not found');
+        throw SlotNotFoundError({
+            template: this.template,
+            slot: index
+        });
     }
 
     /**
@@ -79,7 +85,7 @@ class Processor {
             // valid slot must have a higher slot index than the previous one. 
             // If not, the next slot is relative to another child template.
             if (slotIndex > lastSlotIndex) {
-                const slot: Slot = this.getSlotByIndex(slotIndex);
+                const slot: Slot = this.getSlot(slotIndex);
                 slot.commit(current);
                 lastSlotIndex = slotIndex;
             }
