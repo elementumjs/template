@@ -5,53 +5,67 @@
 }(this, (function (exports) { 'use strict';
 
     /**
-     * openingHint string contains and empty Comment representation.
+     * openHint the initial character of a {@link Node.ELEMENT_NODE} string
+     * representation. It allows to find the correct position into a string part for
+     * a start {@link Slot} mark.
      */
-    var openingHint = "<";
+    var openHint = "<";
     /**
-     * endMarkNeedle string contains the nodeValue of the comment nodes that mark
-     * the end of a slot.
+     * endHint string contains the {@link Node.nodeValue} of the comment nodes
+     * that mark the end of a {@link Slot}.
      */
-    var endMarkNeedle = "-";
+    var endHint = "-";
     /**
-     * markGenerator function returns a HTML comment string definition with the slot
-     * mark content as value.
-     * @param {*} needle - Content to place into the mark
+     * markGenerator function returns a {@link Node.COMMENT_NODE} string definition
+     * with the slot mark content as value.
+     * @param {*} hint - Content to place into the mark. By default
+     * {@link endHint}.
      */
-    var markGenerator = function (needle) { return "<!--" + needle + "-->"; };
+    var markGenerator = function (hint) {
+        if (hint === void 0) { hint = endHint; }
+        return "<!--" + hint + "-->";
+    };
     /**
-     *
-     * @param part
-     * @returns
+     * escapePart return an escaped version of the provided string to use it into a
+     * {@link RegExp} definition without special characters errors.
+     * @param {string} part The string part to escape.
+     * @returns {string} - The escaped part string.
      */
-    var escapePart = function (part) { return part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); };
+    var escapePart = function (part) {
+        return part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    };
     /**
-     * Regex expressions to detect attributes name and its prefix.
+     * attrPrefixRgx contains a {@link RegExp} to detect attributes and get name and
+     * it prefix from a string. Ex.: From `<div foo="bar ` gets `foo` & `bar `.
      */
-    var attributeNameAndPrefixRgx = /\s(\S+)\=[\"\']([^\"]*)$/;
+    var attrPrefixRgx = /\s(\S+)\=[\"\']([^\"]*)$/;
+    /**
+     * startAttrParser function parses a part string like the start of an HTML
+     * attribute string representation. If the provided part is not an attribute,
+     * it returns `null`. Else, returns a the name of the attribute and the prefix
+     * part from its content.
+     * @param {string} part The part to parse.
+     * @returns {Array<string>} - The result of the parse process.
+     */
     var startAttrParser = function (part) {
-        var result = attributeNameAndPrefixRgx.exec(part);
+        var result = attrPrefixRgx.exec(part);
         return result !== null ? [result[1], result[2]] : null;
     };
     /**
-     * Regex expressions to catchs the slot attribute sufix.
+     * Regex expressions to catchs the {@link Slot} attribute suffix.
+     * Ex.: From ` bar" foo2="bar2">` gets ` bar`.
      */
-    var attributeSufixRgx = /^([^\"]*)[\"|\'][\s|\>]/;
-    var endAttrParser = function (part) {
-        var result = attributeSufixRgx.exec(part);
-        return result !== null ? result[1] : null;
-    };
+    var attrSufixRgx = /^([^\"]*)[\"|\'][\s|\>]/;
     /**
-     * acceptNode its a function to filter Comment nodes with a number as nodeValue.
-     * This kind of Comments represents the start of a template slot.
-     * @param {Node} node - Node candidate to filter.
-     * @returns {number} Returns if node provided is allowed between
-     * {@link NodeFilter.FILTER_ACCEPT} and {@link NodeFilter.FILTER_REJECT}.
+     * endAttrParser function parses a part string like the end of an HTML attribute
+     * representation. If the provided part is not an attribute, it returns `null`.
+     * Else, returns the attribute content suffix.
+     * @param {string} part The part to parse.
+     * @returns {string} - The result of the parse process.
      */
-    var acceptNode = function (node) {
-        var nodeType = node.nodeType, nodeValue = node.nodeValue;
-        return nodeType === Node.COMMENT_NODE && !!parseInt(nodeValue) ?
-            NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    var endAttrParser = function (part) {
+        var result = attrSufixRgx.exec(part);
+        return result !== null ? result[1] : null;
     };
 
     /*! *****************************************************************************
@@ -94,6 +108,8 @@
     /**
      * TemplateError extends {@link Error} to provide custom errors to the library.
      * It allows to manage the error message easely.
+     * @class TemplateError
+     * @extends {Error}
      */
     var TemplateError = /** @class */ (function (_super) {
         __extends(TemplateError, _super);
@@ -157,6 +173,18 @@
         return TemplateError.generate(TemplateError.NOT_TEMPLATE_VALUE, metadata);
     };
 
+    /**
+     * acceptNode its a function to filter Comment nodes with a number as nodeValue.
+     * This kind of Comments represents the start of a template slot.
+     * @param {Node} node - Node candidate to filter.
+     * @returns {number} Returns if node provided is allowed between
+     * {@link NodeFilter.FILTER_ACCEPT} and {@link NodeFilter.FILTER_REJECT}.
+     */
+    var acceptNode = function (node) {
+        var nodeType = node.nodeType, nodeValue = node.nodeValue;
+        return nodeType === Node.COMMENT_NODE && !!parseInt(nodeValue) ?
+            NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    };
     /**
      * Processor class interprets a template, renders, and updates its slots into a
      * provided container. It checks if the template has not rendered yet into the
@@ -277,7 +305,7 @@
                     var slotNodes = [];
                     var endMark = startMark.nextSibling;
                     while (endMark.nodeType !== Node.COMMENT_NODE &&
-                        endMark.nodeValue !== endMarkNeedle) {
+                        endMark.nodeValue !== endHint) {
                         slotNodes.push(endMark);
                         endMark = endMark.nextSibling;
                     }
@@ -399,13 +427,13 @@
                 /**
                  * Iterates over strings items appending its parts escaped and a pattern
                  * to detect {@link Slot} areas. Closing {@link Slot} interpolations
-                 * with a end mark ({@link endMarkNeedle}).
+                 * with a end mark using ({@link markGenerator}).
                  */
                 var last = this.strings.length - 1;
                 for (var i = 0; i < last; i++) {
                     htmlDef += escapePart(this.strings[i]) + "(.*)";
                     if (!this.slots[i].isAttr)
-                        htmlDef += escapePart(markGenerator(endMarkNeedle));
+                        htmlDef += escapePart(markGenerator());
                 }
                 /**
                  * Returns the result of the iterations, appending to it the last
@@ -443,7 +471,7 @@
                         value = value.join("");
                     htmlDef += this.strings[i] + value;
                     if (!this.slots[i].isAttr)
-                        htmlDef += markGenerator(endMarkNeedle);
+                        htmlDef += markGenerator();
                 }
                 /**
                  * Returns the result of the iterations, appending to it the last
@@ -525,7 +553,7 @@
                      * the first attribute slot of the {@link Node}, updates the
                      * current slot index to the new one.
                      */
-                    var pos = part.lastIndexOf(openingHint);
+                    var pos = part.lastIndexOf(openHint);
                     if (pos != -1)
                         slotIndex++;
                     /**

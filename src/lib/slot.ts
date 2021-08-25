@@ -1,4 +1,4 @@
-import { endMarkNeedle } from "./common";
+import { endHint } from "./common";
 import { IsNotTemplateError } from "./error";
 
 import { Processor } from "./processor";
@@ -50,7 +50,7 @@ class Slot {
                 let endMark: Node = startMark.nextSibling;
                 while (
                     endMark.nodeType !== Node.COMMENT_NODE && 
-                    endMark.nodeValue !== endMarkNeedle
+                    endMark.nodeValue !== endHint
                 ) {
                     slotNodes.push(endMark);
                     endMark = endMark.nextSibling;

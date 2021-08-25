@@ -1,6 +1,5 @@
 import {
-    openingHint,
-    endMarkNeedle,
+    openHint,
     markGenerator,
     escapePart,
     startAttrParser,
@@ -47,13 +46,13 @@ class Template {
         /**
          * Iterates over strings items appending its parts escaped and a pattern 
          * to detect {@link Slot} areas. Closing {@link Slot} interpolations 
-         * with a end mark ({@link endMarkNeedle}).
+         * with a end mark using ({@link markGenerator}).
          */
         const last: number = this.strings.length - 1;
         for (let i = 0; i < last; i++) {
             htmlDef += escapePart(this.strings[i]) + "(.*)";
             if (!this.slots[i].isAttr) 
-                htmlDef += escapePart(markGenerator(endMarkNeedle));
+                htmlDef += escapePart(markGenerator());
         }
 
         /**
@@ -89,7 +88,7 @@ class Template {
             if (Array.isArray(value)) value = value.join("");
             htmlDef += this.strings[i] + value;
 
-            if (!this.slots[i].isAttr) htmlDef += markGenerator(endMarkNeedle);
+            if (!this.slots[i].isAttr) htmlDef += markGenerator();
         }
         
         /**
@@ -170,7 +169,7 @@ class Template {
                  * the first attribute slot of the {@link Node}, updates the 
                  * current slot index to the new one.
                  */
-                const pos: number = part.lastIndexOf(openingHint);
+                const pos: number = part.lastIndexOf(openHint);
                 if (pos != -1) slotIndex++;
 
                 /**

@@ -1,8 +1,20 @@
-import { acceptNode } from "./common";
 import { SlotNotFoundError } from "./error";
 
 import type { Slot } from "./slot"; 
 import type { Template } from "./template";
+
+/**
+ * acceptNode its a function to filter Comment nodes with a number as nodeValue.
+ * This kind of Comments represents the start of a template slot. 
+ * @param {Node} node - Node candidate to filter.
+ * @returns {number} Returns if node provided is allowed between 
+ * {@link NodeFilter.FILTER_ACCEPT} and {@link NodeFilter.FILTER_REJECT}.
+ */
+const acceptNode = (node: Node): number => {
+    const { nodeType, nodeValue } = node;
+    return nodeType === Node.COMMENT_NODE && !!parseInt(nodeValue) ?
+        NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+}
 
 /**
  * Processor class interprets a template, renders, and updates its slots into a 
