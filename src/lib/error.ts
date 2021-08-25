@@ -8,6 +8,8 @@ const ERROR_MESSAGES = {
 /**
  * TemplateError extends {@link Error} to provide custom errors to the library.
  * It allows to manage the error message easely.
+ * @class TemplateError
+ * @extends {Error}
  */
 class TemplateError extends Error {
     code: number;
