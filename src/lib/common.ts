@@ -26,12 +26,21 @@ export const escapePart = (part: string): string => part.replace(/[.*+?^${}()|[\
 /**
  * Regex expressions to detect attributes name and its prefix.
  */ 
-export const attributeNameAndPrefixRgx: RegExp = /\s(\S+)\=[\"\']([^\"]*)$/;
+const attributeNameAndPrefixRgx: RegExp = /\s(\S+)\=[\"\']([^\"]*)$/;
+export const startAttrParser = (part: string): Array<string> => {
+    const result: RegExpExecArray = attributeNameAndPrefixRgx.exec(part);
+    return result !== null ? [ result[1], result[2] ] : null;
+}
+
 
 /**
  * Regex expressions to catchs the slot attribute sufix.
  */
-export const attributeSufixRgx: RegExp = /^([^\"]*)[\"|\'][\s|\>]/;
+const attributeSufixRgx: RegExp = /^([^\"]*)[\"|\'][\s|\>]/;
+export const endAttrParser = (part: string): string => {
+    const result: RegExpExecArray = attributeSufixRgx.exec(part);
+    return result !== null ? result[1] : null;
+}
 
 /**
  * acceptNode its a function to filter Comment nodes with a number as nodeValue.

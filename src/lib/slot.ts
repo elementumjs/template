@@ -15,6 +15,9 @@ class Slot {
     /** The value of the field */
     value: any;
 
+    /**
+     * 
+     */
     get isAttr(): boolean {
         return this.attr !== null && this.attr !== undefined;
     }
@@ -25,6 +28,10 @@ class Slot {
         this.value = value;
     }
 
+    /**
+     * 
+     * @param startMark 
+     */
     public commit(startMark: Node): void {
         // If {@link Slot} is not an attribute it will need a node type
         // commit, else it calls to {@link Processor.commitAttr}.
@@ -58,6 +65,10 @@ class Slot {
         } else this.commitAttr(startMark.nextSibling);
     }
 
+    /**
+     * 
+     * @param node 
+     */
     private commitAttr(node: HTMLElement | Node): void {
         const { attr } = this;
         const value = Array.isArray(this.value) ? 
@@ -67,6 +78,9 @@ class Slot {
         if (current !== value) (node as HTMLElement).setAttribute(attr, value);
     }
 
+    /**
+     * 
+     */
     private commitValue(node: Node, startMark: Node, value: any): void {
         if (node === undefined || node === null) {
             startMark.parentNode.insertBefore(
@@ -76,6 +90,12 @@ class Slot {
         } else if (node.nodeValue !== value) node.nodeValue = value;
     }
 
+    /**
+     * 
+     * @param node 
+     * @param startMark 
+     * @param template 
+     */
     private commitTemplate(node: Node, startMark: Node, template: Template) {
         if (node === undefined) {
             startMark.parentNode.insertBefore(template.element, startMark.nextSibling);
@@ -86,6 +106,13 @@ class Slot {
         } else node.parentNode.replaceChild(template.element, node);
     }
 
+    /**
+     * 
+     * @param nodes 
+     * @param startMark 
+     * @param endMark 
+     * @param templates 
+     */
     private commitTemplates(nodes: Array<Node>, startMark: Node, endMark: Node, templates: Array<Template>): void {
         // Calculate the limit of the iteration that is the highest length 
         // between the nodes list and values list.
