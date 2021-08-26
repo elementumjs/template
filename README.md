@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/elementumjs/template/master/assets/header.svg"/>
+<img src="https://raw.githubusercontent.com/elementumjs/template/main/assets/header.svg"/>
 
 [![CDN](https://img.shields.io/badge/CDN-jsDelivr-blueviolet)][1]
 [![package_version](https://img.shields.io/npm/v/@elementumjs/template)][2]
@@ -10,29 +10,69 @@
 `@elementum/template` is a lightweight and powerful HTML template engine for vanilla WebComponents.
 
 - [📝 How to use it][7]
-  - [Creating a template: `html` function][8]
-  - [Rendering into a container][9]
-- [🧪 Full example][10]
-- [⚙️ Installation][11]
-  - [Import from CDN as ES Module][12]
-  - [Or install the package locally][13]
-  - [Other import methods][14]
+  - [Creating a basic template: `html` function][8]
+  - [Nested templates][9]
+  - [Rendering into a container][10]
+- [🧪 Full example][11]
+- [⚙️ Installation][12]
+  - [Import from CDN as ES Module][13]
+  - [Or install the package locally][14]
+  - [Other import methods][15]
 
 ---
 
-<img src="https://raw.githubusercontent.com/elementumjs/template/master/assets/how-to-use-it.svg"/>
+<img src="https://raw.githubusercontent.com/elementumjs/template/main/assets/how-to-use-it.svg"/>
 
 ### How to use it
 
-#### Creating a template: `html` function
+#### Creating a basic template: `html` function
 
 To define and init a new `Template`, you need to use the `html` template tag:
 
 ```javascript
-    // import { html, render } from "https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.esm.js";
     import { html, render } from '@elementumjs/template';
 
-    const template = (counter) => html`<h1>Counted ${ counter } times</h1>`;
+    const template = (list) => html`<div>
+            <p>My list has ${ list.length } item(s).</p>
+        </div>`;
+```
+
+#### Nested templates
+
+It's also possible define nested templates to create more complex elements. It is useful for render lists or conditionals:
+
+ * **Basic template**: Include it into the html representation as other value using the `html` tag.
+    ```javascript
+        const template = () => html`<p>Random number: ${ html`<b>${ Math.random() }</b>` }</p>`;
+    ```
+ * **Conditional rendering**: Return a template based on a condition:
+    ```javascript
+        const userProfile = (user) => html`...`;
+        const loginButton = () => html`...`;
+
+        const template = (userLogged) => html`<div>
+                ${ user !== undefined ? userProfile(user) : loginButton() }
+            </div>`;
+    ```
+ * **List of templates**
+    ```javascript
+        const listTemplate = (list) => html`<ul>
+                ${ list.map(item => html`<li>${ item }</li>` ) }
+            </ul>`;
+    ```
+
+Following the example...
+```javascript
+    import { html, render } from '@elementumjs/template';
+
+    const listTemplate = (list) => html`<ul>
+            ${ list.map(item => html`<li>${ item }</li>` ) }
+        </ul>`;
+
+    const template = (list) => html`<div>
+            <p>My list has ${ list.length } item(s).</p>
+            ${ listTemplate(list) }
+        </div>`;
 ```
 
 #### Rendering into a container
@@ -40,42 +80,49 @@ To define and init a new `Template`, you need to use the `html` template tag:
 To render the template into a container `HTMLElement`, the data to fill the template is passed as an attribute to the template generator function. The result of that function will be parsed by `render` function to check if the template is already rendered and update it or is not rendered yet and inject it.
 
 ```javascript
-    // import { html, render } from "https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.esm.js";
     import { html, render } from '@elementumjs/template';
 
+    // const listTemplate = ...;
     // const template = ...;
 
-    let counter = 0;
-    render(template(counter), document.body /* the container to render the template */);
+    const list = [ "item 1" ];
+    render(template(list), document.body /* the container to render the template */);
 ```
 
-<img src="https://raw.githubusercontent.com/elementumjs/template/master/assets/full-example.svg"/>
+<img src="https://raw.githubusercontent.com/elementumjs/template/main/assets/full-example.svg"/>
 
 ### Full example
 
-<img src="https://raw.githubusercontent.com/elementumjs/template/master/assets/demo.gif" width="350"/>
+<img src="https://raw.githubusercontent.com/elementumjs/template/main/assets/demo.gif" width="550"/>
 
 ```javascript
     // import { html, render } from "https://cdn.jsdelivr.net/gh/elementumjs/template/dist/template.esm.js";
     import { html, render } from '@elementumjs/template';
 
-    // Create the template
-    const template = (counter) => html`<h1>Counted ${ counter } times</h1>`;
+    // Create the templates
+    const listTemplate = (list) => html`<ul>
+            ${ list.map(item => html`<li>${ item }</li>` ) }
+        </ul>`;
 
-    // Instance the value and render the template into the container.
-    let counter = 0;
-    render(template(counter), document.body);
+    const template = (list) => html`<div>
+            <p>My list has ${ list.length } item(s).</p>
+            ${ listTemplate(list) }
+        </div>`;
 
-    // Update the value and render the template
+    // Instance the list and render the template into the container.
+    const list = [ "item 1" ];
+    render(template(list), document.body);
+
+    // Update the list and re-render the template every second
     let loop = setInterval(() => {
-        counter++;
-        render(template(counter), document.body);
+        list.push(`item ${list.length + 1}`)
+        render(template(list), document.body);
 
-        if (counter == 10) clearInterval(loop);
+        if (counter == 5) clearInterval(loop);
     }, 1000);
 ```
 
-<img src="https://raw.githubusercontent.com/elementumjs/template/master/assets/installation.svg"/>
+<img src="https://raw.githubusercontent.com/elementumjs/template/main/assets/installation.svg"/>
 
 ### Installation
 
@@ -125,16 +172,18 @@ Checkout other import methods in [`dist/README.md`](./dist/README.md).
 
 [7]: #how-to-use-it
 
-[8]: #creating-a-template-html-function
+[8]: #creating-a-basic-template-html-function
 
-[9]: #rendering-into-a-container
+[9]: #nested-templates
 
-[10]: #full-example
+[10]: #rendering-into-a-container
 
-[11]: #installation
+[11]: #full-example
 
-[12]: #import-from-cdn-as-es.module
+[12]: #installation
 
-[13]: #or-install-the-package-locally
+[13]: #import-from-cdn-as-es.module
 
-[14]: #other-import-methods
+[14]: #or-install-the-package-locally
+
+[15]: #other-import-methods
