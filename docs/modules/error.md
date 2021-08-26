@@ -35,7 +35,7 @@ code [TemplateError.INLINE_FN](../classes/error.TemplateError.md#inline_fn).
 
 #### Defined in
 
-[src/lib/error.ts:63](https://github.com/elementumjs/template/blob/ef55a53/src/lib/error.ts#L63)
+[src/lib/error.ts:63](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L63)
 
 ___
 
@@ -60,7 +60,7 @@ code [TemplateError.NOT_SLOT](../classes/error.TemplateError.md#not_slot).
 
 #### Defined in
 
-[src/lib/error.ts:72](https://github.com/elementumjs/template/blob/ef55a53/src/lib/error.ts#L72)
+[src/lib/error.ts:72](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L72)
 
 ___
 
@@ -85,4 +85,4 @@ code [TemplateError.NOT_TEMPLATE](../classes/error.TemplateError.md#not_template
 
 #### Defined in
 
-[src/lib/error.ts:81](https://github.com/elementumjs/template/blob/ef55a53/src/lib/error.ts#L81)
+[src/lib/error.ts:81](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L81)

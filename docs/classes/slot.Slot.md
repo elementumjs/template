@@ -49,7 +49,7 @@ properties.
 
 #### Defined in
 
-[src/lib/slot.ts:41](https://github.com/elementumjs/template/blob/ef55a53/src/lib/slot.ts#L41)
+[src/lib/slot.ts:41](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L41)
 
 ## Properties
 
@@ -62,7 +62,7 @@ defines the attribute name.
 
 #### Defined in
 
-[src/lib/slot.ts:20](https://github.com/elementumjs/template/blob/ef55a53/src/lib/slot.ts#L20)
+[src/lib/slot.ts:20](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L20)
 
 ___
 
@@ -74,7 +74,7 @@ The [Slot](slot.Slot.md) index into a [Template](template.Template.md).
 
 #### Defined in
 
-[src/lib/slot.ts:15](https://github.com/elementumjs/template/blob/ef55a53/src/lib/slot.ts#L15)
+[src/lib/slot.ts:15](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L15)
 
 ___
 
@@ -86,7 +86,7 @@ The current [Slot](slot.Slot.md) value.
 
 #### Defined in
 
-[src/lib/slot.ts:22](https://github.com/elementumjs/template/blob/ef55a53/src/lib/slot.ts#L22)
+[src/lib/slot.ts:22](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L22)
 
 ## Accessors
 
@@ -105,7 +105,7 @@ isAttr property getter returns a boolean that is `true` if the current
 
 #### Defined in
 
-[src/lib/slot.ts:29](https://github.com/elementumjs/template/blob/ef55a53/src/lib/slot.ts#L29)
+[src/lib/slot.ts:29](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L29)
 
 ## Methods
 
@@ -131,7 +131,7 @@ to get the end [Slot](slot.Slot.md) mark iterating over the start mark siblings.
 
 #### Defined in
 
-[src/lib/slot.ts:56](https://github.com/elementumjs/template/blob/ef55a53/src/lib/slot.ts#L56)
+[src/lib/slot.ts:56](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L56)
 
 ___
 
@@ -155,7 +155,7 @@ is distinct that the new one before update it.
 
 #### Defined in
 
-[src/lib/slot.ts:97](https://github.com/elementumjs/template/blob/ef55a53/src/lib/slot.ts#L97)
+[src/lib/slot.ts:97](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L97)
 
 ___
 
@@ -185,7 +185,7 @@ Node provided.
 
 #### Defined in
 
-[src/lib/slot.ts:139](https://github.com/elementumjs/template/blob/ef55a53/src/lib/slot.ts#L139)
+[src/lib/slot.ts:139](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L139)
 
 ___
 
@@ -213,7 +213,7 @@ Else, it calls iteratively [Slot.commitTemplate](slot.Slot.md#committemplate).
 
 #### Defined in
 
-[src/lib/slot.ts:162](https://github.com/elementumjs/template/blob/ef55a53/src/lib/slot.ts#L162)
+[src/lib/slot.ts:162](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L162)
 
 ___
 
@@ -240,4 +240,4 @@ provided value.
 
 #### Defined in
 
-[src/lib/slot.ts:116](https://github.com/elementumjs/template/blob/ef55a53/src/lib/slot.ts#L116)
+[src/lib/slot.ts:116](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L116)

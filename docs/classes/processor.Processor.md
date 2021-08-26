@@ -43,7 +43,7 @@ HTMLElement.
 
 #### Defined in
 
-[src/lib/processor.ts:41](https://github.com/elementumjs/template/blob/ef55a53/src/lib/processor.ts#L41)
+[src/lib/processor.ts:41](https://github.com/elementumjs/template/blob/86af5b9/src/lib/processor.ts#L41)
 
 ## Properties
 
@@ -55,7 +55,7 @@ The container Node to render the [Template](template.Template.md).
 
 #### Defined in
 
-[src/lib/processor.ts:31](https://github.com/elementumjs/template/blob/ef55a53/src/lib/processor.ts#L31)
+[src/lib/processor.ts:31](https://github.com/elementumjs/template/blob/86af5b9/src/lib/processor.ts#L31)
 
 ___
 
@@ -67,7 +67,7 @@ The [Template](template.Template.md) instance to process.
 
 #### Defined in
 
-[src/lib/processor.ts:29](https://github.com/elementumjs/template/blob/ef55a53/src/lib/processor.ts#L29)
+[src/lib/processor.ts:29](https://github.com/elementumjs/template/blob/86af5b9/src/lib/processor.ts#L29)
 
 ## Methods
 
@@ -93,7 +93,7 @@ provided one.
 
 #### Defined in
 
-[src/lib/processor.ts:53](https://github.com/elementumjs/template/blob/ef55a53/src/lib/processor.ts#L53)
+[src/lib/processor.ts:53](https://github.com/elementumjs/template/blob/86af5b9/src/lib/processor.ts#L53)
 
 ___
 
@@ -112,4 +112,4 @@ the [Template](template.Template.md) to the container.
 
 #### Defined in
 
-[src/lib/processor.ts:76](https://github.com/elementumjs/template/blob/ef55a53/src/lib/processor.ts#L76)
+[src/lib/processor.ts:76](https://github.com/elementumjs/template/blob/86af5b9/src/lib/processor.ts#L76)

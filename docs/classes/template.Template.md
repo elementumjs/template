@@ -45,7 +45,7 @@ starts the building process.
 
 #### Defined in
 
-[src/lib/template.ts:28](https://github.com/elementumjs/template/blob/ef55a53/src/lib/template.ts#L28)
+[src/lib/template.ts:28](https://github.com/elementumjs/template/blob/86af5b9/src/lib/template.ts#L28)
 
 ## Properties
 
@@ -57,7 +57,7 @@ The list of [Slot](slot.Slot.md)'s of the [Template](template.Template.md).
 
 #### Defined in
 
-[src/lib/template.ts:20](https://github.com/elementumjs/template/blob/ef55a53/src/lib/template.ts#L20)
+[src/lib/template.ts:20](https://github.com/elementumjs/template/blob/86af5b9/src/lib/template.ts#L20)
 
 ___
 
@@ -69,7 +69,7 @@ The parts of the [Template](template.Template.md).
 
 #### Defined in
 
-[src/lib/template.ts:18](https://github.com/elementumjs/template/blob/ef55a53/src/lib/template.ts#L18)
+[src/lib/template.ts:18](https://github.com/elementumjs/template/blob/86af5b9/src/lib/template.ts#L18)
 
 ## Accessors
 
@@ -88,7 +88,7 @@ The generated HTML element.
 
 #### Defined in
 
-[src/lib/template.ts:109](https://github.com/elementumjs/template/blob/ef55a53/src/lib/template.ts#L109)
+[src/lib/template.ts:109](https://github.com/elementumjs/template/blob/86af5b9/src/lib/template.ts#L109)
 
 ___
 
@@ -108,7 +108,7 @@ The composed html string definition.
 
 #### Defined in
 
-[src/lib/template.ts:75](https://github.com/elementumjs/template/blob/ef55a53/src/lib/template.ts#L75)
+[src/lib/template.ts:75](https://github.com/elementumjs/template/blob/86af5b9/src/lib/template.ts#L75)
 
 ___
 
@@ -129,7 +129,7 @@ its [Slot](slot.Slot.md) areas.
 
 #### Defined in
 
-[src/lib/template.ts:42](https://github.com/elementumjs/template/blob/ef55a53/src/lib/template.ts#L42)
+[src/lib/template.ts:42](https://github.com/elementumjs/template/blob/86af5b9/src/lib/template.ts#L42)
 
 ## Methods
 
@@ -156,7 +156,7 @@ HTMLElement matches.
 
 #### Defined in
 
-[src/lib/template.ts:128](https://github.com/elementumjs/template/blob/ef55a53/src/lib/template.ts#L128)
+[src/lib/template.ts:128](https://github.com/elementumjs/template/blob/86af5b9/src/lib/template.ts#L128)
 
 ___
 
@@ -180,7 +180,7 @@ over the template strings composing each slot.
 
 #### Defined in
 
-[src/lib/template.ts:139](https://github.com/elementumjs/template/blob/ef55a53/src/lib/template.ts#L139)
+[src/lib/template.ts:139](https://github.com/elementumjs/template/blob/86af5b9/src/lib/template.ts#L139)
 
 ___
 
@@ -198,4 +198,4 @@ The composed html string definition.
 
 #### Defined in
 
-[src/lib/template.ts:118](https://github.com/elementumjs/template/blob/ef55a53/src/lib/template.ts#L118)
+[src/lib/template.ts:118](https://github.com/elementumjs/template/blob/86af5b9/src/lib/template.ts#L118)

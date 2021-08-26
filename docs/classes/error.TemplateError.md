@@ -58,7 +58,7 @@ Error.constructor
 
 #### Defined in
 
-[src/lib/error.ts:35](https://github.com/elementumjs/template/blob/ef55a53/src/lib/error.ts#L35)
+[src/lib/error.ts:35](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L35)
 
 ## Properties
 
@@ -70,7 +70,7 @@ The error code of the error message.
 
 #### Defined in
 
-[src/lib/error.ts:16](https://github.com/elementumjs/template/blob/ef55a53/src/lib/error.ts#L16)
+[src/lib/error.ts:16](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L16)
 
 ___
 
@@ -96,7 +96,7 @@ The error metadata to append to the error as extra data to debug it.
 
 #### Defined in
 
-[src/lib/error.ts:18](https://github.com/elementumjs/template/blob/ef55a53/src/lib/error.ts#L18)
+[src/lib/error.ts:18](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L18)
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[src/lib/error.ts:21](https://github.com/elementumjs/template/blob/ef55a53/src/lib/error.ts#L21)
+[src/lib/error.ts:21](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L21)
 
 ___
 
@@ -144,7 +144,7 @@ ___
 
 #### Defined in
 
-[src/lib/error.ts:23](https://github.com/elementumjs/template/blob/ef55a53/src/lib/error.ts#L23)
+[src/lib/error.ts:23](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L23)
 
 ___
 
@@ -154,7 +154,7 @@ ___
 
 #### Defined in
 
-[src/lib/error.ts:25](https://github.com/elementumjs/template/blob/ef55a53/src/lib/error.ts#L25)
+[src/lib/error.ts:25](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L25)
 
 ___
 
@@ -252,4 +252,4 @@ create function a error by its code. Gets the error message from
 
 #### Defined in
 
-[src/lib/error.ts:51](https://github.com/elementumjs/template/blob/ef55a53/src/lib/error.ts#L51)
+[src/lib/error.ts:51](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L51)

@@ -4,7 +4,7 @@ import {
     escapePart,
     startAttrParser,
     endAttrParser
-} from "./common";
+} from "./globals";
 import { InlineFnErr } from "./error";
 
 import { Slot } from "./slot";

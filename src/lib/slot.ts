@@ -1,4 +1,4 @@
-import { isEndMark } from "./common";
+import { isEndMark } from "./globals";
 import { NotTemplateErr } from "./error";
 
 import { Processor } from "./processor";

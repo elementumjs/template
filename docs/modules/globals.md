@@ -1,18 +1,18 @@
-# Module: common
+# Module: globals
 
 ## Table of contents
 
 ### Variables
 
-- [openHint](common.md#openhint)
+- [openHint](globals.md#openhint)
 
 ### Functions
 
-- [endAttrParser](common.md#endattrparser)
-- [escapePart](common.md#escapepart)
-- [isEndMark](common.md#isendmark)
-- [markGenerator](common.md#markgenerator)
-- [startAttrParser](common.md#startattrparser)
+- [endAttrParser](globals.md#endattrparser)
+- [escapePart](globals.md#escapepart)
+- [isEndMark](globals.md#isendmark)
+- [markGenerator](globals.md#markgenerator)
+- [startAttrParser](globals.md#startattrparser)
 
 ## Variables
 
@@ -26,7 +26,7 @@ a start [Slot](../classes/slot.Slot.md) mark.
 
 #### Defined in
 
-[src/lib/common.ts:6](https://github.com/elementumjs/template/blob/ef55a53/src/lib/common.ts#L6)
+src/lib/globals.ts:6
 
 ## Functions
 
@@ -52,7 +52,7 @@ Else, returns the attribute content suffix.
 
 #### Defined in
 
-[src/lib/common.ts:76](https://github.com/elementumjs/template/blob/ef55a53/src/lib/common.ts#L76)
+src/lib/globals.ts:76
 
 ___
 
@@ -77,7 +77,7 @@ RegExp definition without special characters errors.
 
 #### Defined in
 
-[src/lib/common.ts:40](https://github.com/elementumjs/template/blob/ef55a53/src/lib/common.ts#L40)
+src/lib/globals.ts:40
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 isEndMark function checks if the provided node (Node or the string
 definition) matches with the [Slot](../classes/slot.Slot.md) endMark, generated using
-[markGenerator](common.md#markgenerator) with [openHint](common.md#openhint) as argument.
+[markGenerator](globals.md#markgenerator) with [openHint](globals.md#openhint) as argument.
 
 #### Parameters
 
@@ -103,7 +103,7 @@ definition) matches with the [Slot](../classes/slot.Slot.md) endMark, generated 
 
 #### Defined in
 
-[src/lib/common.ts:29](https://github.com/elementumjs/template/blob/ef55a53/src/lib/common.ts#L29)
+src/lib/globals.ts:29
 
 ___
 
@@ -126,7 +126,7 @@ with the slot mark content as value.
 
 #### Defined in
 
-[src/lib/common.ts:20](https://github.com/elementumjs/template/blob/ef55a53/src/lib/common.ts#L20)
+src/lib/globals.ts:20
 
 ___
 
@@ -153,4 +153,4 @@ part from its content.
 
 #### Defined in
 
-[src/lib/common.ts:58](https://github.com/elementumjs/template/blob/ef55a53/src/lib/common.ts#L58)
+src/lib/globals.ts:58
