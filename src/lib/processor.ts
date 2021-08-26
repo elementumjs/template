@@ -8,7 +8,7 @@ import type { Template } from "./template";
  * This kind of Comments represents the start of a template slot. 
  * @param {Node} node - Node candidate to filter.
  * @returns {number} Returns if node provided is allowed between 
- * {@link NodeFilter.FILTER_ACCEPT} and {@link NodeFilter.FILTER_REJECT}.
+ * NodeFilter.FILTER_ACCEPT and NodeFilter.FILTER_REJECT.
  */
 const acceptNode = (node: Node): number => {
     const { nodeType, nodeValue } = node;
@@ -17,22 +17,26 @@ const acceptNode = (node: Node): number => {
 }
 
 /**
- * Processor class interprets a template, renders, and updates its slots into a 
- * provided container. It checks if the template has not rendered yet into the 
- * container and inject it into the container. If it is already rendered, 
- * iterates over its slots and checks if they have changed to update them.
+ * Processor class interprets a {@link Template}, renders, and updates its slots
+ * into a provided container Node. It checks if the {@link Template} has
+ * not rendered yet into the container and inject it into the container 
+ * Node. If it is already rendered, iterates over its {@link Slot}s and 
+ * checks if they have changed to update them.
  * @class Processor
  */
 class Processor {
+    /** The {@link Template} instance to process. */
     template: Template;
+    /** The container Node to render the {@link Template}. */
     container: HTMLElement | Node;
 
     /**
-     * Processor constructor receives the template to process and the container 
-     * where it will be rendered.
-     * {@link HTMLElement}.
-     * @param {Template} template - The template to process.
-     * @param {HTMLElement} container - The container to render the template.
+     * Processor constructor receives the {@link Template} to process and the 
+     * container where it will be rendered.
+     * HTMLElement.
+     * @param {Template} template - The {@link Template} instance to process.
+     * @param {Node | HTMLElement} container - The container Node to 
+     * render the {@link Template}.
      */
     constructor(template: Template, container: HTMLElement | Node) {
         this.template = template;
@@ -71,9 +75,9 @@ class Processor {
      */
     public render(): void {
         /**
-         * Creates a {@link TreeWalker} to iterates over container child nodes.
-         * It uses {@link acceptNode} to get the {@link Slot} marks 
-         * ({@link Comment} elements that includes an index).
+         * Creates a TreeWalker to iterates over container child nodes.It uses 
+         * {@link acceptNode} to get the {@link Slot} marks (Comment elements 
+         * that includes an index).
          */
         const walker: NodeIterator = document.createNodeIterator(
             this.container,
@@ -106,8 +110,8 @@ class Processor {
         while (current) {
             /**
              * Iterate over the found marks getting their {@link Slot} index and 
-             * committing the current {@link Node} (the sibling of the 
-             * {@link Node} mark).
+             * committing the current Node (the sibling of the 
+             * Node mark).
              */
             const slotIndex: number = parseInt(current.nodeValue);
             if (slotIndex > lastSlotIndex) {

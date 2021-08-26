@@ -6,21 +6,27 @@ const MEESAGES = {
 };
 
 /**
- * TemplateError extends {@link Error} to provide custom errors to the library.
+ * TemplateError extends Error to provide custom errors to the library.
  * It allows to manage the error message easely.
  * @class TemplateError
  * @extends {Error}
  */
 class TemplateError extends Error {
+    /** The error code of the error message. */
     code: number;
+    /** The error metadata to append to the error as extra data to debug it. */
     metadata: any;
 
+    /**  */
     static INLINE_FN: number = 1;
+    /**  */
     static NOT_SLOT: number = 2;
+    /**  */
     static NOT_TEMPLATE: number = 3;
 
     /**
-     * constructor method fill the class attributes of a {@link TemplateError}.
+     * TemplateError constructor method fill the class attributes of a 
+     * {@link TemplateError}.
      * @param {string} message Human readable error message to throw.
      * @param {number} code The error code of the error message.
      * @param {any} metadata The error metadata to append to the error as extra

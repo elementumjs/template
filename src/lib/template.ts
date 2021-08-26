@@ -14,14 +14,16 @@ import { Slot } from "./slot";
  * @class Template
  */
 class Template {
+    /** The parts of the {@link Template}. */
     strings: Array<string>;
+    /** The list of {@link Slot}'s of the {@link Template}. */
     slots: Array<Slot>;
 
     /**
      * Creates the {@link Template}, initializes some internal variables and 
      * starts the building process.
-     * @param {string[]} strings - The literal string tag strings
-     * @param {Object|Array} values - The literal string tag args
+     * @param {string[]} strings - The parts of the {@link Template}.
+     * @param {Object|Array} values - The literal strings values.
      */
     constructor(strings: Array<string>, values: Array<any> = []) {
         this.strings = strings;
@@ -31,10 +33,11 @@ class Template {
     }
 
     /**
-     * regexp getter function returns a composed {@link RegExp} of the current
-     * element to check if any {@link HTMLElement} match with the current 
-     * {@link Template} and its {@link Slot} areas.
-     * @returns {RegExp} - The composed {@link RegExp} of the current template.
+     * regexp getter function returns a composed RegExp of the current element 
+     * to check if any HTMLElement match with the current {@link Template} and 
+     * its {@link Slot} areas.
+     * @returns {RegExp} - The composed RegExp of the current 
+     * {@link Template}.
      */
     private get regexp(): RegExp {
         /**
@@ -65,8 +68,8 @@ class Template {
 
     /**
      * html function returns the string definition of the template, including
-     * the slots marks (attributes and interpolation marks) and the value of
-     * the slots injected.
+     * the {@link Slot}'s marks (attributes and interpolation marks) and the 
+     * value of the {@link Slot}'s injected.
      * @returns {string} The composed html string definition.
      */
     get html(): string {
@@ -116,11 +119,11 @@ class Template {
 
     /**
      * match function test the current {@link Template.regexp} against the 
-     * {@link HTMLElement.outerHTML} representation of the {@link HTMLElement}
+     * {@link HTMLElement.outerHTML} representation of the HTMLElement
      * provided as argument.
      * @param {Node | HTMLElement} node The target of the test.
      * @returns {boolean} - The result of the test, returns `true` if the 
-     * {@link HTMLElement} matches.
+     * HTMLElement matches.
      */
     public match(node: Node | HTMLElement): boolean {
         const def = (node as HTMLElement).outerHTML;
@@ -128,10 +131,10 @@ class Template {
     }
     
     /**
-     * prepare functions detect the slots in the current template, its type 
-     * between interpolation and attribute, and the slot index. Iterates over 
-     * the template strings composing each slot.
-     * @param {Array} values - The current values of the slots
+     * prepare functions detect the {@link Slot}'s in the current template, its 
+     * type between interpolation and attribute, and the slot index. Iterates 
+     * over the template strings composing each slot.
+     * @param {Array} values - The current values of the {@link Slot}'s
      */
     private prepare(values: Array<any>) {
         /**
@@ -165,9 +168,9 @@ class Template {
             if (result !== null) {
                 /**
                  * If it is an attribute, identifies the initial position of the
-                 * opening {@link Node} character to mark the element. If it's
-                 * the first attribute slot of the {@link Node}, updates the 
-                 * current slot index to the new one.
+                 * opening Node character to mark the element. If it's
+                 * the first attribute slot of the Node, updates the 
+                 * current {@link Slot} index to the new one.
                  */
                 const pos: number = part.lastIndexOf(openHint);
                 if (pos != -1) slotIndex++;
@@ -234,17 +237,17 @@ class Template {
                 this.strings[i + 1] = next.slice(suffix.length);
 
                 /**
-                 * Stores the slot composing its value withe the current value,
-                 * its prefix, the following components of the attribute and its
-                 * suffix.
+                 * Stores the {@link Slot} composing its value withe the current 
+                 * value, its prefix, the following components of the attribute
+                 * and its suffix.
                  */
                 const slotValue = prefix + value + following + suffix;
                 this.slots.push(new Slot(slotIndex, slotValue, attr));
             } else {
                 /**
                  * If it is an interpoltation, the string is updated with the
-                 * mark and its index, the slot index is updated and the slot 
-                 * is stored.
+                 * mark and its index, the {@link Slot} index is updated and the 
+                 * {@link Slot} is stored.
                  */
                 slotIndex++;
                 this.strings[i] = part + markGenerator(slotIndex);

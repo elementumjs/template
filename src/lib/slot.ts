@@ -1,27 +1,43 @@
-import { endHint } from "./common";
+import { isEndMark } from "./common";
 import { NotTemplateErr } from "./error";
 
 import { Processor } from "./processor";
 import type { Template } from "./template";
 
 /**
- * Slot object abstracts a fillable slot of a template.
+ * Slot class abstracts a fillable slot of a template. It will affect to a 
+ * HTMLElement as an argument, value or another or anothers 
+ * {@link Template}'s.
+ * @class Slot
  */
 class Slot {
-    /** The attribute index */
+    /** The {@link Slot} index into a {@link Template}. */
     slotIndex: number;
-    /** The attribute name */
+    /**
+     * If the current {@link Slot} is an attribute of a HTMLElement it 
+     * defines the attribute name.
+     */
     attr?: string;
-    /** The value of the field */
+    /** The current {@link Slot} value. */
     value: any;
 
     /**
-     * 
+     * isAttr property getter returns a boolean that is `true` if the current
+     * {@link Slot} has been parsed as a HTML attribute.
+     * @returns {boolean} - The result of the test.
      */
     get isAttr(): boolean {
         return this.attr !== null && this.attr !== undefined;
     }
 
+    /**
+     * Slot constructor assings the provided arguments to the current instance 
+     * properties.
+     * @param {number} index The {@link Slot} index into a {@link Template}.
+     * @param {*} value The current {@link Slot} value.
+     * @param {string=} attr If the current {@link Slot} is an attribute of a 
+     * HTMLElement it defines the attribute name.
+     */
     constructor(index: number, value: any, attr?: string) {
         this.slotIndex = index;
         this.attr = attr;
@@ -29,29 +45,36 @@ class Slot {
     }
 
     /**
-     * 
-     * @param startMark 
+     * commit function checks the current {@link Slot} to decide if it is a HTML
+     * attribute, a interpolation value, another {@link Template} or a group of
+     * them, and calls the specific commit function by the detected {@link Slot}
+     * type. If the {@link Slot} is a group of {@link Templates} its necessary 
+     * to get the end {@link Slot} mark iterating over the start mark siblings.
+     * @param {Node} startMark The start {@link Slot} mark, generated during the
+     * {@link Template} creation.
      */
     public commit(startMark: Node): void {
-        // If {@link Slot} is not an attribute it will need a node type
-        // commit, else it calls to {@link Processor.commitAttr}.
+        /**
+         * If {@link Slot} is not an attribute it will need a node type commit, 
+         * else it calls to {@link Processor.commitAttr}.
+         */
         if (!this.isAttr) {
-            // If the {@link Slot} has an array of values it calls to
-            // {@lin Processor.renderNodes}, else calls to 
-            // {@link Processor.renderNode}.
+            /**
+             * If the {@link Slot} has an array of values it calls to
+             * {@lin Processor.renderNodes}, else calls to 
+             * {@link Processor.renderNode}.
+             */
             const slotValue = this.value;
             if (Array.isArray(slotValue)) {
-                // Gets the referenced slot and its values.
-                // If a {@link Slot} has an array of values, it's 
-                // possible that more than one {@link Node} could be
-                // affected. Iterate over curent {@link Node} siblings
-                // looking for {@link Node.ELEMENT_NODE}.
+                /**
+                 * Gets the referenced slot and its values. If a {@link Slot} 
+                 * has an array of values, it's possible that more than one 
+                 * Node could be affected. Iterate over curent 
+                 * Node siblings looking for HTMLElement.
+                 */
                 const slotNodes: Array<Node> = [];
                 let endMark: Node = startMark.nextSibling;
-                while (
-                    endMark.nodeType !== Node.COMMENT_NODE && 
-                    endMark.nodeValue !== endHint
-                ) {
+                while (!isEndMark(endMark)) {
                     slotNodes.push(endMark);
                     endMark = endMark.nextSibling;
                 }
@@ -66,8 +89,10 @@ class Slot {
     }
 
     /**
-     * 
-     * @param node 
+     * commitAttr function updates the current {@link Slot} as a HTML attribute
+     * of the provided Node. It checks if the attribute value
+     * is distinct that the new one before update it.
+     * @param {Node} node The target Node to update.
      */
     private commitAttr(node: HTMLElement | Node): void {
         const { attr } = this;
@@ -79,7 +104,14 @@ class Slot {
     }
 
     /**
-     * 
+     * commitValue updates a {@link Node.TEXT_NODE} content with the value
+     * provided as argument. If the provided Node is not created yet, 
+     * it will create it before the {@link Slot} startMark and setted with the 
+     * provided value.
+     * @param {Node} node The target Node to update.
+     * @param {Node} startMark The Comment that references the start of the
+     * {@link Slot}.
+     * @param {*} value The value to commit into the Node.
      */
     private commitValue(node: Node, startMark: Node, value: any): void {
         if (node === undefined || node === null) {
@@ -91,15 +123,23 @@ class Slot {
     }
 
     /**
-     * 
-     * @param node 
-     * @param startMark 
-     * @param template 
+     * commitTemplate updates a Node content with the correct 
+     * {@link Template} instance. If the provided Node is `undefined`,
+     * it will create a new one with the {@link Template.element}. If it is a
+     * {@link Slot} end mark it will append it before this mark. Lastly, if the
+     * current Node does not match with the new {@link Template},
+     * replace it with the new one. Else, updates the {@link Template} into the
+     * Node provided.
+     * @param {Node} node The target Node to update.
+     * @param {Node} startMark The Comment that references the
+     * start of the {@link Slot}.
+     * @param {Template} template The {@link Template} to commit into the 
+     * Node.
      */
     private commitTemplate(node: Node, startMark: Node, template: Template) {
         if (node === undefined) {
             startMark.parentNode.insertBefore(template.element, startMark.nextSibling);
-        } else if (node.nodeType === Node.COMMENT_NODE) {
+        } else if (isEndMark(node)) {
             node.parentNode.insertBefore(template.element, node);
         } else if (template.match(node)) {
             new Processor(template, node).render();
@@ -107,31 +147,42 @@ class Slot {
     }
 
     /**
-     * 
-     * @param nodes 
-     * @param startMark 
-     * @param endMark 
-     * @param templates 
+     * commitTemplates function iterates over the {@link Slot} values as 
+     * {@link Template}'s and its Node's commiting the changes. If
+     * any Node has not a asigned {@link Template} it will be removed.
+     * Else, it calls iteratively {@link Slot.commitTemplate}.
+     * @param {Array<Node>} nodes The target Nodes to update.
+     * @param {Node} startMark The Comment that references the
+     * start of the {@link Slot}.
+     * @param {Node} endMark The Comment that references the
+     * end of the {@link Slot}.
+     * @param {Array<Template>} templates The {@link Template}s to commit into the 
+     * Nodes.
      */
     private commitTemplates(nodes: Array<Node>, startMark: Node, endMark: Node, templates: Array<Template>): void {
-        // Calculate the limit of the iteration that is the highest length 
-        // between the nodes list and values list.
+        /**
+         * Calculate the limit of the iteration that is the highest length 
+         * between the nodes list and values list.
+         */
         const templatesLength: number = templates.length,
             nodesLength: number = nodes.length,
             limit: number = templatesLength > nodesLength ? 
                 templatesLength : nodesLength;
 
-        // Iterate over values and nodes. 
         for (let i: number = 0; i < limit; i++) {
             const [ node, template ] = [nodes[i], templates[i] ];
-            
-            // If the current {@link Node} has not value, remove the 
-            // current {@link Node}.
+            /**
+             * If the current Node has not value, remove the current 
+             * Node. Throws an error if any of {@link Slot} values is 
+             * not a Template instance. 
+             */
             if (template !== undefined) {
-                // Throws an error if any of slot values is not a Template instance. 
                 if (template.constructor.name !== "Template")
                     throw NotTemplateErr({ node, template });
-
+                /**
+                 * If the current Node is `undefined` use the 
+                 * {@link Slot} end mark as target.
+                 */
                 this.commitTemplate(node || endMark, startMark, template);
             } else if (node !== undefined) node.parentNode.removeChild(node);
         }

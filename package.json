@@ -1,6 +1,6 @@
 {
   "name": "@elementumjs/template",
-  "version": "0.1.14",
+  "version": "0.2.0",
   "description": "Simple HTML template engine for vanilla WebComponents",
   "files": [
     "src/*.js",
@@ -14,7 +14,7 @@
     "build": "NODE_ENV=production rollup -c build/rollup.config.js",
     "dev": "rollup -w -c build/rollup.config.js",
     "start": "npm run dev",
-    "docs": "typedoc --tsconfig build/tsconfig.json --mode file --out docs --hideSources --hideGenerator --hideBreadcrumbs src/lib/"
+    "docs": "typedoc --tsconfig build/tsconfig.json --out docs --hideGenerator --hideBreadcrumbs src/lib/"
   },
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@rollup/plugin-typescript": "^8.2.5",
     "@types/jest": "^27.0.1",
-    "@types/node": "^16.7.1",
+    "@types/node": "^16.7.2",
     "babel-jest": "^27.0.6",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
