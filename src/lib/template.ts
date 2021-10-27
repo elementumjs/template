@@ -5,7 +5,7 @@ import {
     startAttrParser,
     endAttrParser
 } from "./globals";
-import { InlineFnErr } from "./error";
+import { InlineFnErr, EmptyTemplateSlots } from "./error";
 
 import { Slot } from "./slot";
 
@@ -28,6 +28,8 @@ class Template {
     constructor(strings: Array<string>, values: Array<any> = []) {
         this.strings = strings;
         this.slots = [];
+
+        if (this.strings.length <= 1) throw EmptyTemplateSlots(strings);
 
         this.prepare(values);
     }

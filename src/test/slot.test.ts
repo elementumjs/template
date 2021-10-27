@@ -1,12 +1,5 @@
+import { html } from "../template";
 import { Slot } from '../lib/slot';
-import { Template } from "../lib/template";
-
-// html string tag is an function that works as Template class constructor 
-// wrapper.
-const html = (
-    strings: TemplateStringsArray, 
-    ...args: Array<any>
-) => new Template([...strings.raw], args);
 
 const createParent = () => {
     const parent = document.createElement('div');
@@ -54,7 +47,7 @@ test("Slot.commit", () => {
 
     // Test template interpolation
     const parentTemplate = createParent();
-    const childTemplate = html`<p>Test</p>`;
+    const childTemplate = html`<p>${ 'Test' }</p>`;
     const templateInterpolation = new Slot(1, childTemplate);
     const templateHandler = jest.spyOn(templateInterpolation as any, 'commitTemplate');
     templateInterpolation.commit(parentTemplate.firstChild);
@@ -131,14 +124,14 @@ test("Slot.commitValue", () => {
 test("Slot.commitTemplate", () => {
     // Test template interpolation
     const parentTemplate = createParent();
-    const simpleTemplate = html`<p>Test</p>`;
+    const simpleTemplate = html`<p>${ 'Test' }</p>`;
     const templateInterpolation = new Slot(1, simpleTemplate);
     const templateHandler = jest.spyOn(templateInterpolation as any, 'commitTemplate');
     
     templateInterpolation.commit(parentTemplate.firstChild);
     expect(templateHandler).toHaveBeenCalled();
     let target = parentTemplate.firstElementChild;
-    expect(target.outerHTML).toBe('<p>Test</p>');
+    expect(target.outerHTML).toBe('<p><!--1-->Test<!-----></p>');
 
     const complexTemplate = html`<p>${ false }</p>`;
     templateInterpolation.value = complexTemplate;

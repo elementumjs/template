@@ -2,7 +2,8 @@
 const MEESAGES = {
     1: "injected functions cannot be inlined, reference it instead",
     2: "the requested slot is not found",
-    3: "every list items must be a Template instance"
+    3: "every list items must be a Template instance",
+    4: "one slot is required at least. To create string-only elements don't use this."
 };
 
 /**
@@ -23,6 +24,8 @@ class TemplateError extends Error {
     static NOT_SLOT: number = 2;
     /**  */
     static NOT_TEMPLATE: number = 3;
+    /**  */
+    static EMPTY_SLOTS: number = 4;
 
     /**
      * TemplateError constructor method fill the class attributes of a 
@@ -80,5 +83,14 @@ export const NotSlotErr = (metadata?: any): TemplateError =>
  */
 export const NotTemplateErr = (metadata?: any): TemplateError => 
     TemplateError.create(TemplateError.NOT_TEMPLATE, metadata);
+
+/**
+ * EmptyTemplateSlots function creates a {@link TemplateError} using the error
+ * code {@link TemplateError.EMPTY_SLOTS}.
+ * @param metadata Extra data to append to the error to debug it.
+ * @returns {TemplateError} - The created error.
+ */
+export const EmptyTemplateSlots = (metadata?: any): TemplateError => 
+TemplateError.create(TemplateError.EMPTY_SLOTS, metadata);
 
 export { TemplateError };

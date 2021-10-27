@@ -1,12 +1,5 @@
+import { html } from "../template";
 import { Slot } from "../lib/slot";
-import { Template } from "../lib/template";
-
-// html string tag is an function that works as Template class constructor 
-// wrapper.
-const html = (
-    strings: TemplateStringsArray, 
-    ...args: Array<any>
-) => new Template([...strings.raw], args);
 
 test("Template.constructor", () => {
     let template = html`<div id="${ 'id1' }">
@@ -28,14 +21,11 @@ test("Template.constructor", () => {
     
     expect(template.slots).toEqual(slots);
     expect(template.strings).toEqual(strings);
-
-    template = html`<h1>Hello World!</h1>`;
-    expect(template.slots).toEqual([]); 
-    expect(template.strings).toEqual([ '<h1>Hello World!</h1>' ]); 
-
-    template = html``;
-    expect(template.slots).toEqual([]); 
-    expect(template.strings).toEqual([ '' ]); 
+    
+    let empty = () => html``;
+    let noSlot = () => html`<h1>Hello World!</h1>`;
+    expect(empty).toThrow();
+    expect(noSlot).toThrow();
 });
 
 test("Template.html", () => {
@@ -47,15 +37,6 @@ test("Template.html", () => {
     </div>`;
 
     expect(template.html).toBe(expected);
-
-    template = html`<h1>Hello World!</h1>`;
-    expected = '<h1>Hello World!</h1>';
-    expect(template.html).toBe(expected);
-
-    template = html``;
-    expected = '';
-    expect(template.html).toBe(expected);
-
 });
 test("Template.element", () => {
     let template = html`<div id="${ 'id1' }">
