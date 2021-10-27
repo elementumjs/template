@@ -173,7 +173,7 @@ class Template {
                  * current {@link Slot} index to the new one.
                  */
                 const pos: number = part.lastIndexOf(openHint);
-                if (pos != -1) slotIndex++;
+                if (pos !== -1) slotIndex++;
 
                 /**
                  * If the opening character is in the first position of the 
@@ -186,10 +186,9 @@ class Template {
                 } else if (pos > 0) {
                     const start: string = part.substring(0, pos - 1);
                     const end: string = part.substring(pos);
-                    
                     this.strings[i] = start + markGenerator(slotIndex) + end;
                 }
-                
+
                 /**
                  * Gets the attribute name to store into a {@link Slot} and 
                  * gets prefix value of the attribute.

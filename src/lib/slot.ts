@@ -24,10 +24,34 @@ class Slot {
     /**
      * isAttr property getter returns a boolean that is `true` if the current
      * {@link Slot} has been parsed as a HTML attribute.
-     * @returns {boolean} - The result of the test.
+     * @returns {boolean} - The result of the assertion.
      */
     get isAttr(): boolean {
         return this.attr !== null && this.attr !== undefined;
+    }
+
+    /**
+     * containsTemplate property getter returns a boolean that is `true` if the current
+     * {@link Slot} value is an instance of a Template.
+     * @returns {boolean} - The result of the assertion.
+     */
+    get containsTemplate(): boolean {
+        const values = Array.isArray(this.value) ? this.value : [ this.value ]; 
+
+        return values.every(value => {
+            return typeof value === 'object' && value !== null &&
+                value.constructor.name === "Template";
+        });
+    }
+
+    /**
+     * stringValue property getter returns a string version of the current 
+     * {@link Slot} value.
+     * @returns {string} - The result of the casting.
+     */
+    private get stringValue(): string {
+        return Array.isArray(this.value) ? 
+            this.value.join(" ") : String(this.value);
     }
 
     /**
@@ -65,7 +89,7 @@ class Slot {
              * {@link Processor.renderNode}.
              */
             const slotValue = this.value;
-            if (Array.isArray(slotValue)) {
+            if (Array.isArray(slotValue) && this.containsTemplate) {
                 /**
                  * Gets the referenced slot and its values. If a {@link Slot} 
                  * has an array of values, it's possible that more than one 
@@ -78,12 +102,11 @@ class Slot {
                     slotNodes.push(endMark);
                     endMark = endMark.nextSibling;
                 }
-                this.commitTemplates(slotNodes, startMark, endMark, slotValue);
+                this.commitTemplates(slotNodes, startMark, endMark);
             } else {
                 const node: Node = startMark.nextSibling;
-                if (slotValue.constructor.name === "Template") {
-                    this.commitTemplate(node, startMark, slotValue);
-                } else this.commitValue(node, startMark, slotValue);
+                if (this.containsTemplate) this.commitTemplate(node, startMark);
+                else this.commitValue(node, startMark);
             }
         } else this.commitAttr(startMark.nextSibling);
     }
@@ -95,10 +118,7 @@ class Slot {
      * @param {Node} node The target Node to update.
      */
     private commitAttr(node: HTMLElement | Node): void {
-        const { attr } = this;
-        const value = Array.isArray(this.value) ? 
-            this.value.join(" ") : this.value;
-
+        const [ attr, value ] = [ this.attr, this.stringValue ];
         const current = (node as HTMLElement).getAttribute(attr);
         if (current !== value) (node as HTMLElement).setAttribute(attr, value);
     }
@@ -113,7 +133,9 @@ class Slot {
      * {@link Slot}.
      * @param {*} value The value to commit into the Node.
      */
-    private commitValue(node: Node, startMark: Node, value: any): void {
+    private commitValue(node: Node, startMark: Node): void {
+        const value = this.stringValue;
+
         if (node === undefined || node === null) {
             startMark.parentNode.insertBefore(
                 document.createTextNode(value), 
@@ -136,7 +158,8 @@ class Slot {
      * @param {Template} template The {@link Template} to commit into the 
      * Node.
      */
-    private commitTemplate(node: Node, startMark: Node, template: Template) {
+    private commitTemplate(node: Node, startMark: Node, childTemplate?: Template) {
+        const template = childTemplate || this.value as Template;
         if (node === undefined) {
             startMark.parentNode.insertBefore(template.element, startMark.nextSibling);
         } else if (isEndMark(node)) {
@@ -156,14 +179,16 @@ class Slot {
      * start of the {@link Slot}.
      * @param {Node} endMark The Comment that references the
      * end of the {@link Slot}.
-     * @param {Array<Template>} templates The {@link Template}s to commit into the 
-     * Nodes.
+     * @param {Array<Template>} templates The {@link Template}s to commit into 
+     * the Nodes.
      */
-    private commitTemplates(nodes: Array<Node>, startMark: Node, endMark: Node, templates: Array<Template>): void {
+    private commitTemplates(nodes: Array<Node>, startMark: Node, endMark: Node): void {
         /**
-         * Calculate the limit of the iteration that is the highest length 
-         * between the nodes list and values list.
+         * Get the current templates from the slot value and calculate the limit
+         * of the iteration that is the highest length between the nodes list 
+         * and values list.
          */
+        const templates = this.value as Array<Template>;
         const templatesLength: number = templates.length,
             nodesLength: number = nodes.length,
             limit: number = templatesLength > nodesLength ? 

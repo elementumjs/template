@@ -44,27 +44,31 @@ class Processor {
     }
 
     /**
-     * getSlot method iterates over the current template definition 
+     * getSlots method iterates over the current template definition 
      * {@link Slot}'s searching for a {@link Slot} with the same index that the 
      * provided one.
      * @param {number} slotIndex The index of the {@link Slot} to search.
      * @returns {Slot} - The desired slot.
      */
-    private getSlot(index: number): Slot {
+    private getSlots(index: number): Array<Slot> {
         /**
          * Iterates over the template {@link Slot}'s to get the correct one by 
          * provided index.
          */
+        const slots: Array<Slot> = []
         const { length } = this.template.slots;
         for (let i: number = 0; i < length; i++) {
             /** Search for the {@link Slot} with the current index. */
             const slot: Slot = this.template.slots[i];
-            if (slot.slotIndex === index) return slot;
+            if (slot.slotIndex === index) slots.push(slot);
         }
-        throw NotSlotErr({
+
+        if (slots.length === 0) throw NotSlotErr({
             template: this.template,
             slot: index
         });
+
+        return slots;
     }
 
     /**
@@ -115,8 +119,9 @@ class Processor {
              */
             const slotIndex: number = parseInt(current.nodeValue);
             if (slotIndex > lastSlotIndex) {
-                const slot: Slot = this.getSlot(slotIndex);
-                slot.commit(current);
+                const slots: Array<Slot> = this.getSlots(slotIndex);
+                const { length } = slots;
+                for (let i = 0; i < length; i++) slots[i].commit(current);
                 lastSlotIndex = slotIndex;
             }
             current = walker.nextNode();

@@ -118,7 +118,7 @@ To render the template into a container `HTMLElement`, the data to fill the temp
         list.push(`item ${list.length + 1}`)
         render(template(list), document.body);
 
-        if (counter == 5) clearInterval(loop);
+        if (list.length == 5) clearInterval(loop);
     }, 1000);
 ```
 
