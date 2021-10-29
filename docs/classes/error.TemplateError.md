@@ -24,6 +24,7 @@ It allows to manage the error message easely.
 - [metadata](error.TemplateError.md#metadata)
 - [name](error.TemplateError.md#name)
 - [stack](error.TemplateError.md#stack)
+- [EMPTY\_SLOTS](error.TemplateError.md#empty_slots)
 - [INLINE\_FN](error.TemplateError.md#inline_fn)
 - [NOT\_SLOT](error.TemplateError.md#not_slot)
 - [NOT\_TEMPLATE](error.TemplateError.md#not_template)
@@ -58,7 +59,7 @@ Error.constructor
 
 #### Defined in
 
-[src/lib/error.ts:35](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L35)
+[src/lib/error.ts:38](https://github.com/elementumjs/template/blob/7413e6a/src/lib/error.ts#L38)
 
 ## Properties
 
@@ -70,7 +71,7 @@ The error code of the error message.
 
 #### Defined in
 
-[src/lib/error.ts:16](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L16)
+[src/lib/error.ts:17](https://github.com/elementumjs/template/blob/7413e6a/src/lib/error.ts#L17)
 
 ___
 
@@ -96,7 +97,7 @@ The error metadata to append to the error as extra data to debug it.
 
 #### Defined in
 
-[src/lib/error.ts:18](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L18)
+[src/lib/error.ts:19](https://github.com/elementumjs/template/blob/7413e6a/src/lib/error.ts#L19)
 
 ___
 
@@ -128,13 +129,23 @@ node_modules/typescript/lib/lib.es5.d.ts:975
 
 ___
 
+### EMPTY\_SLOTS
+
+▪ `Static` **EMPTY\_SLOTS**: `number` = `4`
+
+#### Defined in
+
+[src/lib/error.ts:28](https://github.com/elementumjs/template/blob/7413e6a/src/lib/error.ts#L28)
+
+___
+
 ### INLINE\_FN
 
 ▪ `Static` **INLINE\_FN**: `number` = `1`
 
 #### Defined in
 
-[src/lib/error.ts:21](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L21)
+[src/lib/error.ts:22](https://github.com/elementumjs/template/blob/7413e6a/src/lib/error.ts#L22)
 
 ___
 
@@ -144,7 +155,7 @@ ___
 
 #### Defined in
 
-[src/lib/error.ts:23](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L23)
+[src/lib/error.ts:24](https://github.com/elementumjs/template/blob/7413e6a/src/lib/error.ts#L24)
 
 ___
 
@@ -154,7 +165,7 @@ ___
 
 #### Defined in
 
-[src/lib/error.ts:25](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L25)
+[src/lib/error.ts:26](https://github.com/elementumjs/template/blob/7413e6a/src/lib/error.ts#L26)
 
 ___
 
@@ -167,6 +178,8 @@ ___
 ▸ (`err`, `stackTraces`): `any`
 
 Optional override for formatting stack traces
+
+**`see`** https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 ##### Parameters
 
@@ -252,4 +265,4 @@ create function a error by its code. Gets the error message from
 
 #### Defined in
 
-[src/lib/error.ts:51](https://github.com/elementumjs/template/blob/86af5b9/src/lib/error.ts#L51)
+[src/lib/error.ts:54](https://github.com/elementumjs/template/blob/7413e6a/src/lib/error.ts#L54)

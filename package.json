@@ -14,7 +14,7 @@
     "build": "NODE_ENV=production rollup -c build/rollup.config.js",
     "dev": "rollup -w -c build/rollup.config.js",
     "start": "npm run dev",
-    "docs": "typedoc --tsconfig build/tsconfig.json --out docs --hideGenerator --hideBreadcrumbs src/lib/"
+    "docs": "typedoc --tsconfig build/tsconfig.json --out docs --hideGenerator --hideBreadcrumbs src/lib/*.ts"
   },
   "repository": {
     "type": "git",

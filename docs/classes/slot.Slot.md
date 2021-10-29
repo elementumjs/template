@@ -20,7 +20,9 @@ HTMLElement as an argument, value or another or anothers
 
 ### Accessors
 
+- [containsTemplate](slot.Slot.md#containstemplate)
 - [isAttr](slot.Slot.md#isattr)
+- [stringValue](slot.Slot.md#stringvalue)
 
 ### Methods
 
@@ -49,7 +51,7 @@ properties.
 
 #### Defined in
 
-[src/lib/slot.ts:41](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L41)
+[src/lib/slot.ts:65](https://github.com/elementumjs/template/blob/7413e6a/src/lib/slot.ts#L65)
 
 ## Properties
 
@@ -62,7 +64,7 @@ defines the attribute name.
 
 #### Defined in
 
-[src/lib/slot.ts:20](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L20)
+[src/lib/slot.ts:20](https://github.com/elementumjs/template/blob/7413e6a/src/lib/slot.ts#L20)
 
 ___
 
@@ -74,7 +76,7 @@ The [Slot](slot.Slot.md) index into a [Template](template.Template.md).
 
 #### Defined in
 
-[src/lib/slot.ts:15](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L15)
+[src/lib/slot.ts:15](https://github.com/elementumjs/template/blob/7413e6a/src/lib/slot.ts#L15)
 
 ___
 
@@ -86,9 +88,28 @@ The current [Slot](slot.Slot.md) value.
 
 #### Defined in
 
-[src/lib/slot.ts:22](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L22)
+[src/lib/slot.ts:22](https://github.com/elementumjs/template/blob/7413e6a/src/lib/slot.ts#L22)
 
 ## Accessors
+
+### containsTemplate
+
+• `get` **containsTemplate**(): `boolean`
+
+containsTemplate property getter returns a boolean that is `true` if the current
+[Slot](slot.Slot.md) value is an instance of a Template.
+
+#### Returns
+
+`boolean`
+
+- The result of the assertion.
+
+#### Defined in
+
+[src/lib/slot.ts:38](https://github.com/elementumjs/template/blob/7413e6a/src/lib/slot.ts#L38)
+
+___
 
 ### isAttr
 
@@ -101,11 +122,30 @@ isAttr property getter returns a boolean that is `true` if the current
 
 `boolean`
 
-- The result of the test.
+- The result of the assertion.
 
 #### Defined in
 
-[src/lib/slot.ts:29](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L29)
+[src/lib/slot.ts:29](https://github.com/elementumjs/template/blob/7413e6a/src/lib/slot.ts#L29)
+
+___
+
+### stringValue
+
+• `Private` `get` **stringValue**(): `string`
+
+stringValue property getter returns a string version of the current
+[Slot](slot.Slot.md) value.
+
+#### Returns
+
+`string`
+
+- The result of the casting.
+
+#### Defined in
+
+[src/lib/slot.ts:52](https://github.com/elementumjs/template/blob/7413e6a/src/lib/slot.ts#L52)
 
 ## Methods
 
@@ -131,7 +171,7 @@ to get the end [Slot](slot.Slot.md) mark iterating over the start mark siblings.
 
 #### Defined in
 
-[src/lib/slot.ts:56](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L56)
+[src/lib/slot.ts:80](https://github.com/elementumjs/template/blob/7413e6a/src/lib/slot.ts#L80)
 
 ___
 
@@ -155,13 +195,13 @@ is distinct that the new one before update it.
 
 #### Defined in
 
-[src/lib/slot.ts:97](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L97)
+[src/lib/slot.ts:120](https://github.com/elementumjs/template/blob/7413e6a/src/lib/slot.ts#L120)
 
 ___
 
 ### commitTemplate
 
-▸ `Private` **commitTemplate**(`node`, `startMark`, `template`): `void`
+▸ `Private` **commitTemplate**(`node`, `startMark`, `childTemplate?`): `void`
 
 commitTemplate updates a Node content with the correct
 [Template](template.Template.md) instance. If the provided Node is `undefined`,
@@ -177,7 +217,7 @@ Node provided.
 | :------ | :------ | :------ |
 | `node` | `Node` | The target Node to update. |
 | `startMark` | `Node` | The Comment that references the start of the [Slot](slot.Slot.md). |
-| `template` | [`Template`](template.Template.md) | The [Template](template.Template.md) to commit into the Node. |
+| `childTemplate?` | [`Template`](template.Template.md) | - |
 
 #### Returns
 
@@ -185,13 +225,13 @@ Node provided.
 
 #### Defined in
 
-[src/lib/slot.ts:139](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L139)
+[src/lib/slot.ts:161](https://github.com/elementumjs/template/blob/7413e6a/src/lib/slot.ts#L161)
 
 ___
 
 ### commitTemplates
 
-▸ `Private` **commitTemplates**(`nodes`, `startMark`, `endMark`, `templates`): `void`
+▸ `Private` **commitTemplates**(`nodes`, `startMark`, `endMark`): `void`
 
 commitTemplates function iterates over the [Slot](slot.Slot.md) values as
 [Template](template.Template.md)'s and its Node's commiting the changes. If
@@ -205,7 +245,6 @@ Else, it calls iteratively [Slot.commitTemplate](slot.Slot.md#committemplate).
 | `nodes` | `Node`[] | The target Nodes to update. |
 | `startMark` | `Node` | The Comment that references the start of the [Slot](slot.Slot.md). |
 | `endMark` | `Node` | The Comment that references the end of the [Slot](slot.Slot.md). |
-| `templates` | [`Template`](template.Template.md)[] | The [Template](template.Template.md)s to commit into the Nodes. |
 
 #### Returns
 
@@ -213,13 +252,13 @@ Else, it calls iteratively [Slot.commitTemplate](slot.Slot.md#committemplate).
 
 #### Defined in
 
-[src/lib/slot.ts:162](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L162)
+[src/lib/slot.ts:185](https://github.com/elementumjs/template/blob/7413e6a/src/lib/slot.ts#L185)
 
 ___
 
 ### commitValue
 
-▸ `Private` **commitValue**(`node`, `startMark`, `value`): `void`
+▸ `Private` **commitValue**(`node`, `startMark`): `void`
 
 commitValue updates a {@link Node.TEXT_NODE} content with the value
 provided as argument. If the provided Node is not created yet,
@@ -232,7 +271,6 @@ provided value.
 | :------ | :------ | :------ |
 | `node` | `Node` | The target Node to update. |
 | `startMark` | `Node` | The Comment that references the start of the [Slot](slot.Slot.md). |
-| `value` | `any` | The value to commit into the Node. |
 
 #### Returns
 
@@ -240,4 +278,4 @@ provided value.
 
 #### Defined in
 
-[src/lib/slot.ts:116](https://github.com/elementumjs/template/blob/86af5b9/src/lib/slot.ts#L116)
+[src/lib/slot.ts:136](https://github.com/elementumjs/template/blob/7413e6a/src/lib/slot.ts#L136)

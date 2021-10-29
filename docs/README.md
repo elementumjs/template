@@ -118,7 +118,7 @@ To render the template into a container `HTMLElement`, the data to fill the temp
         list.push(`item ${list.length + 1}`)
         render(template(list), document.body);
 
-        if (list.length == 5) clearInterval(loop);
+        if (counter == 5) clearInterval(loop);
     }, 1000);
 ```
 
@@ -166,7 +166,7 @@ Checkout other import methods in [`dist/README.md`](./dist/README.md).
 
 [4]: https://github.com/elementumjs/template/actions?query=workflow%3Adevelop
 
-[5]: docs/globals.md
+[5]: docs/modules.md
 
 [6]: LICENSE
 

@@ -21,7 +21,7 @@ checks if they have changed to update them.
 
 ### Methods
 
-- [getSlot](processor.Processor.md#getslot)
+- [getSlots](processor.Processor.md#getslots)
 - [render](processor.Processor.md#render)
 
 ## Constructors
@@ -43,7 +43,7 @@ HTMLElement.
 
 #### Defined in
 
-[src/lib/processor.ts:41](https://github.com/elementumjs/template/blob/86af5b9/src/lib/processor.ts#L41)
+[src/lib/processor.ts:41](https://github.com/elementumjs/template/blob/7413e6a/src/lib/processor.ts#L41)
 
 ## Properties
 
@@ -55,7 +55,7 @@ The container Node to render the [Template](template.Template.md).
 
 #### Defined in
 
-[src/lib/processor.ts:31](https://github.com/elementumjs/template/blob/86af5b9/src/lib/processor.ts#L31)
+[src/lib/processor.ts:31](https://github.com/elementumjs/template/blob/7413e6a/src/lib/processor.ts#L31)
 
 ___
 
@@ -67,15 +67,15 @@ The [Template](template.Template.md) instance to process.
 
 #### Defined in
 
-[src/lib/processor.ts:29](https://github.com/elementumjs/template/blob/86af5b9/src/lib/processor.ts#L29)
+[src/lib/processor.ts:29](https://github.com/elementumjs/template/blob/7413e6a/src/lib/processor.ts#L29)
 
 ## Methods
 
-### getSlot
+### getSlots
 
-▸ `Private` **getSlot**(`index`): [`Slot`](slot.Slot.md)
+▸ `Private` **getSlots**(`index`): [`Slot`](slot.Slot.md)[]
 
-getSlot method iterates over the current template definition
+getSlots method iterates over the current template definition
 [Slot](slot.Slot.md)'s searching for a [Slot](slot.Slot.md) with the same index that the
 provided one.
 
@@ -87,13 +87,13 @@ provided one.
 
 #### Returns
 
-[`Slot`](slot.Slot.md)
+[`Slot`](slot.Slot.md)[]
 
 - The desired slot.
 
 #### Defined in
 
-[src/lib/processor.ts:53](https://github.com/elementumjs/template/blob/86af5b9/src/lib/processor.ts#L53)
+[src/lib/processor.ts:53](https://github.com/elementumjs/template/blob/7413e6a/src/lib/processor.ts#L53)
 
 ___
 
@@ -112,4 +112,4 @@ the [Template](template.Template.md) to the container.
 
 #### Defined in
 
-[src/lib/processor.ts:76](https://github.com/elementumjs/template/blob/86af5b9/src/lib/processor.ts#L76)
+[src/lib/processor.ts:80](https://github.com/elementumjs/template/blob/7413e6a/src/lib/processor.ts#L80)

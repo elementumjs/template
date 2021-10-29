@@ -18,7 +18,7 @@
 
 ### openHint
 
-• `Const` **openHint**: `string` = `"<"`
+• **openHint**: `string` = `"<"`
 
 openHint the initial character of a HTMLElement string
 representation. It allows to find the correct position into a string part for
@@ -26,7 +26,7 @@ a start [Slot](../classes/slot.Slot.md) mark.
 
 #### Defined in
 
-src/lib/globals.ts:6
+[src/lib/globals.ts:6](https://github.com/elementumjs/template/blob/7413e6a/src/lib/globals.ts#L6)
 
 ## Functions
 
@@ -52,7 +52,7 @@ Else, returns the attribute content suffix.
 
 #### Defined in
 
-src/lib/globals.ts:76
+[src/lib/globals.ts:76](https://github.com/elementumjs/template/blob/7413e6a/src/lib/globals.ts#L76)
 
 ___
 
@@ -77,7 +77,7 @@ RegExp definition without special characters errors.
 
 #### Defined in
 
-src/lib/globals.ts:40
+[src/lib/globals.ts:40](https://github.com/elementumjs/template/blob/7413e6a/src/lib/globals.ts#L40)
 
 ___
 
@@ -103,7 +103,7 @@ definition) matches with the [Slot](../classes/slot.Slot.md) endMark, generated 
 
 #### Defined in
 
-src/lib/globals.ts:29
+[src/lib/globals.ts:29](https://github.com/elementumjs/template/blob/7413e6a/src/lib/globals.ts#L29)
 
 ___
 
@@ -116,9 +116,9 @@ with the slot mark content as value.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `hint` | `any` | Content to place into the mark. By default {@link endHint}. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `hint` | `any` | `endHint` | Content to place into the mark. By default {@link endHint}. |
 
 #### Returns
 
@@ -126,7 +126,7 @@ with the slot mark content as value.
 
 #### Defined in
 
-src/lib/globals.ts:20
+[src/lib/globals.ts:20](https://github.com/elementumjs/template/blob/7413e6a/src/lib/globals.ts#L20)
 
 ___
 
@@ -153,4 +153,4 @@ part from its content.
 
 #### Defined in
 
-src/lib/globals.ts:58
+[src/lib/globals.ts:58](https://github.com/elementumjs/template/blob/7413e6a/src/lib/globals.ts#L58)
