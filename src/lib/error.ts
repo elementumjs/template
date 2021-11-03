@@ -1,9 +1,7 @@
 /** MEESAGES contains the list of human readables error messages. */
 const MEESAGES = {
     1: "injected functions cannot be inlined, reference it instead",
-    2: "the requested slot is not found",
-    3: "every list items must be a Template instance",
-    4: "one slot is required at least. To create string-only elements don't use this."
+    2: "every list items must be a Template instance"
 };
 
 /**
@@ -21,11 +19,7 @@ class TemplateError extends Error {
     /**  */
     static INLINE_FN: number = 1;
     /**  */
-    static NOT_SLOT: number = 2;
-    /**  */
-    static NOT_TEMPLATE: number = 3;
-    /**  */
-    static EMPTY_SLOTS: number = 4;
+    static NOT_TEMPLATE: number = 2;
 
     /**
      * TemplateError constructor method fill the class attributes of a 
@@ -65,15 +59,6 @@ class TemplateError extends Error {
  */
 export const InlineFnErr = (metadata?: any): TemplateError => 
     TemplateError.create(TemplateError.INLINE_FN, metadata);
-
-/**
- * NotSlotErr function creates a {@link TemplateError} using the error
- * code {@link TemplateError.NOT_SLOT}.
- * @param metadata Extra data to append to the error to debug it.
- * @returns {TemplateError} - The created error.
- */
-export const NotSlotErr = (metadata?: any): TemplateError => 
-    TemplateError.create(TemplateError.NOT_SLOT, metadata);
 
 /**
  * NotTemplateErr function creates a {@link TemplateError} using the error

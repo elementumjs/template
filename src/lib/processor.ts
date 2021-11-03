@@ -1,5 +1,3 @@
-import { NotSlotErr } from "./error";
-
 import type { Slot } from "./slot"; 
 import type { Template } from "./template";
 
@@ -62,11 +60,6 @@ class Processor {
             const slot: Slot = this.template.slots[i];
             if (slot.slotIndex === index) slots.push(slot);
         }
-
-        if (slots.length === 0) throw NotSlotErr({
-            template: this.template,
-            slot: index
-        });
 
         return slots;
     }
