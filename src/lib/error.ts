@@ -84,13 +84,4 @@ export const NotSlotErr = (metadata?: any): TemplateError =>
 export const NotTemplateErr = (metadata?: any): TemplateError => 
     TemplateError.create(TemplateError.NOT_TEMPLATE, metadata);
 
-/**
- * EmptyTemplateSlots function creates a {@link TemplateError} using the error
- * code {@link TemplateError.EMPTY_SLOTS}.
- * @param metadata Extra data to append to the error to debug it.
- * @returns {TemplateError} - The created error.
- */
-export const EmptyTemplateSlots = (metadata?: any): TemplateError => 
-TemplateError.create(TemplateError.EMPTY_SLOTS, metadata);
-
 export { TemplateError };

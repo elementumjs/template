@@ -2,7 +2,7 @@ import { html } from "../template";
 import { Slot } from "../lib/slot";
 
 test("Template.constructor", () => {
-    let template = html`<div id="${ 'id1' }">
+    const template = html`<div id="${ 'id1' }">
         <p class="${ 'class1' }">${ 'Hello World!' }</p>
     </div>`;
 
@@ -22,10 +22,13 @@ test("Template.constructor", () => {
     expect(template.slots).toEqual(slots);
     expect(template.strings).toEqual(strings);
     
-    let empty = () => html``;
-    let noSlot = () => html`<h1>Hello World!</h1>`;
-    expect(empty).toThrow();
-    expect(noSlot).toThrow();
+    const empty = html``;
+    expect(empty.slots).toEqual([]);
+    expect(empty.strings).toEqual(['']);
+
+    const noSlot = html`<h1>Hello World!</h1>`;
+    expect(noSlot.slots).toEqual([]);
+    expect(noSlot.strings).toEqual(['<h1>Hello World!</h1>']);
 });
 
 test("Template.html", () => {
